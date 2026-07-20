@@ -1,0 +1,104 @@
+// Carbon Canvas prototype database.
+//
+// PROTOTYPE ADAPTATION: SQLite instead of hosted Postgres (Supabase) so the
+// prototype runs anywhere with zero external accounts. The model layout
+// matches the Engineering Blueprint §4; swapping the datasource to Postgres
+// is a config change plus a migration. Per-user isolation is enforced in the
+// data-access layer here (RLS arrives with Postgres).
+//
+// PRIVACY INVARIANT (PRD DR-2): no table has a column capable of holding
+// prompt or response text.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  createdAt    DateTime  @default(now())
+  trackingPaused Boolean @default(false)
+  authSessions AuthSession[]
+  syncTokens   SyncToken[]
+  aiSessions   AiSession[]
+}
+
+model AuthSession {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
+}
+
+/// Pairing token the user pastes into the extension popup. Extension → API
+/// auth uses this as a Bearer token; separate from dashboard cookies so it
+/// can be revoked independently.
+model SyncToken {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  createdAt DateTime @default(now())
+  revokedAt DateTime?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
+}
+
+model AiSession {
+  id              String    @id @default(cuid())
+  userId          String
+  platform        String
+  model           String?   // NULLABLE — unknown is a normal state
+  startedAt       DateTime
+  endedAt         DateTime?
+  durationSec     Int       @default(0)
+  turnCount       Int       @default(0)
+  estTokens       Int?      // NULLABLE — estimate only
+  tokenConfidence String    @default("low")
+  clientEventId   String    // idempotency (unique per user, below)
+  createdAt       DateTime  @default(now())
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  estimate        EnvironmentalEstimate?
+
+  @@unique([userId, clientEventId])
+  @@index([userId, startedAt])
+}
+
+model EnvironmentalEstimate {
+  id                 String   @id @default(cuid())
+  sessionId          String   @unique
+  energyWhLow        Float
+  energyWhHigh       Float
+  confidence         String
+  confidenceScore    Float
+  reasonsJson        String   // JSON: [{ok, label}]
+  modelClass         String
+  methodologyVersion String
+  inputsJson         String   // exact engine inputs → recomputable (NFR-12)
+  createdAt          DateTime @default(now())
+  session            AiSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+}
+
+model MethodologyVersion {
+  version         String   @id
+  summary         String
+  assumptionsJson String   // JSON: AssumptionRecord[]
+  releasedAt      DateTime @default(now())
+}
+
+model ResearchSource {
+  id       String  @id
+  title    String
+  org      String
+  year     Int
+  url      String
+  category String
+  note     String
+}

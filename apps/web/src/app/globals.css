@@ -1,0 +1,172 @@
+/* Carbon Canvas design tokens — "calm clarity" (UX Strategy §10).
+   Nature via space/tone, never green cliché. Light/dark first-class. */
+
+:root {
+  --bg: #faf9f7;            /* warm sand-white */
+  --bg-raised: #ffffff;
+  --bg-sunken: #f1efeb;
+  --ink: #23282e;           /* soft slate, not black */
+  --ink-soft: #5c6470;
+  --ink-faint: #8b93a0;
+  --line: #e5e2dc;
+  --accent: #3d6b5c;        /* restrained living green — accent only */
+  --accent-soft: #e6efeb;
+  --sky: #4a7ba6;           /* dawn blue */
+  --sky-soft: #e9f0f6;
+  --warn-soft: #f6efe2;
+  --warn-ink: #8a6d3b;
+  --ok: #3d6b5c;
+  --radius: 12px;
+  --shadow: 0 1px 2px rgba(35, 40, 46, 0.05), 0 4px 16px rgba(35, 40, 46, 0.05);
+  --font:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16181c;
+    --bg-raised: #1e2126;
+    --bg-sunken: #121417;
+    --ink: #e8e6e1;
+    --ink-soft: #a8adb5;
+    --ink-faint: #6f7681;
+    --line: #2b2f36;
+    --accent: #7fb3a1;
+    --accent-soft: #223530;
+    --sky: #8ab4d8;
+    --sky-soft: #1f2c38;
+    --warn-soft: #332b1d;
+    --warn-ink: #cdaa6d;
+    --ok: #7fb3a1;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.25);
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--sky); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+h1, h2, h3 { font-weight: 600; letter-spacing: -0.01em; margin: 0 0 0.5rem; }
+h1 { font-size: 1.6rem; }
+h2 { font-size: 1.15rem; }
+h3 { font-size: 0.95rem; color: var(--ink-soft); }
+
+.container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+.card {
+  background: var(--bg-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 20px 22px;
+}
+
+.grid { display: grid; gap: 16px; }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+@media (max-width: 720px) { .grid-3, .grid-2 { grid-template-columns: 1fr; } }
+
+.stat-value { font-size: 1.9rem; font-weight: 650; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+.stat-label { color: var(--ink-soft); font-size: 0.85rem; margin-top: 2px; }
+
+.muted { color: var(--ink-soft); }
+.faint { color: var(--ink-faint); font-size: 0.85rem; }
+
+.btn {
+  display: inline-block;
+  background: var(--ink);
+  color: var(--bg);
+  border: none;
+  border-radius: 9px;
+  padding: 9px 18px;
+  font-size: 0.92rem;
+  font-weight: 550;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: opacity 160ms ease;
+}
+.btn:hover { opacity: 0.85; text-decoration: none; }
+.btn.secondary { background: var(--bg-sunken); color: var(--ink); border: 1px solid var(--line); }
+.btn.danger { background: #a04545; color: #fff; }
+
+input[type="email"], input[type="password"], input[type="text"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--bg-raised);
+  color: var(--ink);
+  font-size: 0.95rem;
+  font-family: var(--font);
+}
+input:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+label { display: block; font-size: 0.85rem; color: var(--ink-soft); margin: 14px 0 6px; }
+
+/* Confidence dots (UX §7): dot + word + reasons, never color alone. */
+.conf { display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; color: var(--ink-soft); }
+.conf-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.conf-high .conf-dot { background: var(--ok); }
+.conf-medium .conf-dot { background: var(--sky); }
+.conf-low .conf-dot { background: var(--ink-faint); }
+
+.reason { display: flex; gap: 8px; align-items: baseline; font-size: 0.88rem; padding: 3px 0; }
+.reason .mark { flex: none; width: 1.1em; text-align: center; }
+.reason.ok .mark { color: var(--ok); }
+.reason.caveat .mark { color: var(--warn-ink); }
+
+/* Nav */
+.nav {
+  display: flex; align-items: center; gap: 22px;
+  padding: 14px 0; margin-bottom: 28px;
+  border-bottom: 1px solid var(--line);
+}
+.nav .brand { font-weight: 650; color: var(--ink); letter-spacing: -0.01em; }
+.nav a { color: var(--ink-soft); font-size: 0.92rem; }
+.nav a.active, .nav a:hover { color: var(--ink); text-decoration: none; }
+.nav .spacer { flex: 1; }
+
+/* Simple bars */
+.bar-row { display: flex; align-items: center; gap: 10px; padding: 4px 0; font-size: 0.9rem; }
+.bar-label { width: 90px; color: var(--ink-soft); flex: none; }
+.bar-track { flex: 1; height: 10px; background: var(--bg-sunken); border-radius: 6px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 6px; background: var(--accent); transition: width 400ms ease; }
+.bar-fill.alt { background: var(--sky); }
+.bar-value { width: 70px; text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-soft); flex: none; }
+
+/* Trend chart (inline SVG) */
+.chart-wrap { overflow-x: auto; }
+
+/* Empty / notice states — calm honesty (UX §9) */
+.notice {
+  background: var(--accent-soft);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px 18px;
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+}
+.notice.warn { background: var(--warn-soft); color: var(--warn-ink); }
+
+table.plain { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+table.plain th { text-align: left; color: var(--ink-faint); font-weight: 500; font-size: 0.8rem; padding: 6px 10px 6px 0; border-bottom: 1px solid var(--line); }
+table.plain td { padding: 8px 10px 8px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+
+details summary { cursor: pointer; color: var(--sky); font-size: 0.88rem; }
+details[open] summary { margin-bottom: 8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}

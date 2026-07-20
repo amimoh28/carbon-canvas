@@ -29,8 +29,9 @@ const CONFIG = {
     },
     claude: {
       enabled: true,
+      // Confirmed against the live claude.ai DOM (July 2026).
       turnSelectors: [
-        "[data-testid='user-message'], [data-is-streaming], .font-claude-message",
+        "[data-testid='user-message'], .font-claude-response, .font-claude-response-body",
       ],
       userTurnSelectors: ["[data-testid='user-message']"],
       modelSelectors: [

@@ -39,7 +39,10 @@ export const DEFAULT_SELECTORS: Record<PlatformId, AdapterSelectors> = {
   },
   claude: {
     enabled: true,
-    turnSelectors: ["[data-testid='user-message'], [data-is-streaming], .font-claude-message"],
+    // Confirmed against the live claude.ai DOM (July 2026): user turns carry
+    // data-testid="user-message"; assistant turns use .font-claude-response
+    // (NOT .font-claude-message, which was a wrong guess in v0.1).
+    turnSelectors: ["[data-testid='user-message'], .font-claude-response, .font-claude-response-body"],
     userTurnSelectors: ["[data-testid='user-message']"],
     modelSelectors: [
       "[data-testid='model-selector-dropdown']",

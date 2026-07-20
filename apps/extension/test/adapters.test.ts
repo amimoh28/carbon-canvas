@@ -56,7 +56,7 @@ describe("claude adapter", () => {
     setBody(`
       <button aria-haspopup="menu"><span class="whitespace-nowrap">Claude Sonnet 4</span></button>
       <div data-testid="user-message">${"Summarize this paper for me. ".repeat(3)}</div>
-      <div class="font-claude-message">${"The paper argues... ".repeat(50)}</div>
+      <div class="font-claude-response">${"The paper argues... ".repeat(50)}</div>
     `);
   });
 

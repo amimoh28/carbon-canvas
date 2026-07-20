@@ -100,6 +100,18 @@ describe("estimateSessionEnergy", () => {
     const e = estimateSessionEnergy({ ...base, model: "Claude Opus" });
     expect(e.reasons.some((r) => r.label.includes("reasoning tokens"))).toBe(true);
   });
+
+  it("reasoning class is capped at low confidence (v0.2.0 research review)", () => {
+    const e = estimateSessionEnergy({
+      platform: "chatgpt",
+      model: "o3",
+      turnCount: 40,
+      estTokens: 30_000,
+      tokenConfidence: "high",
+    });
+    expect(e.modelClass).toBe("reasoning");
+    expect(e.confidence).toBe("low");
+  });
 });
 
 describe("aggregateEstimates", () => {

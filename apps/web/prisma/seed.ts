@@ -15,6 +15,11 @@ import {
 const prisma = new PrismaClient();
 
 async function main() {
+  // Remove sources dropped from the current methodology, then upsert the
+  // active set — the DB always mirrors exactly what the engine cites.
+  await prisma.researchSource.deleteMany({
+    where: { id: { notIn: SOURCES.map((s) => s.id) } },
+  });
   for (const s of SOURCES) {
     await prisma.researchSource.upsert({
       where: { id: s.id },

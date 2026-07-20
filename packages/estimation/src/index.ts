@@ -90,6 +90,10 @@ export function estimateSessionEnergy(input: EstimateInput): EnergyEstimate {
   if (tokensMeasured) score += 0.15;
   if (tokensGood) score += 0.1;
   if (!hasActivity) score = 0.1;
+  // v0.2.0: reasoning-class estimates are capped at LOW confidence — hidden
+  // thinking tokens are unobservable and the upper-bound sources are
+  // inferred/contested (RESEARCH_REVIEW.md §1, no-consensus flag 3).
+  if (modelClass === "reasoning") score = Math.min(score, 0.45);
 
   const reasons: ConfidenceReason[] = [
     { ok: true, label: "Platform and session observed directly" },

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "node build.mjs",
-    "test": "tsc --noEmit"
+    "test": "tsc --noEmit && vitest run"
   },
   "dependencies": {
     "@carbon-canvas/schema": "workspace:*"
@@ -13,7 +13,9 @@
   "devDependencies": {
     "@types/chrome": "^0.0.278",
     "esbuild": "^0.24.0",
+    "happy-dom": "^15.11.7",
     "typescript": "^5.6.0",
+    "vitest": "^2.1.9",
     "zod": "^3.23.8"
   }
 }

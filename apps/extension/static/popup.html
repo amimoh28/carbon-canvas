@@ -1,2 +1,77 @@
-<!doctype html><html><head><meta charset="utf-8"><title>Carbon Canvas</title></head>
-<body><div id="app"></div><script src="popup.js"></script></body></html>
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Carbon Canvas</title>
+<style>
+  /* Calm-clarity tokens, popup-scale (UX §2). */
+  :root {
+    --bg: #faf9f7; --raised: #fff; --sunken: #f1efeb;
+    --ink: #23282e; --soft: #5c6470; --faint: #8b93a0;
+    --line: #e5e2dc; --accent: #3d6b5c; --accent-soft: #e6efeb;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #16181c; --raised: #1e2126; --sunken: #121417;
+      --ink: #e8e6e1; --soft: #a8adb5; --faint: #6f7681;
+      --line: #2b2f36; --accent: #7fb3a1; --accent-soft: #223530;
+    }
+  }
+  body {
+    width: 340px; margin: 0; padding: 16px;
+    background: var(--bg); color: var(--ink);
+    font: 14px/1.5 -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  header { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+  .brand { font-weight: 650; }
+  .status { margin-left: auto; font-size: 12px; color: var(--soft); display: flex; align-items: center; gap: 5px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+  .dot.paused { background: var(--faint); }
+  .stats { display: flex; gap: 10px; margin-bottom: 12px; }
+  .stat { flex: 1; background: var(--raised); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+  .stat b { display: block; font-size: 20px; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: 11.5px; color: var(--soft); }
+  .bars { background: var(--raised); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin-bottom: 12px; }
+  .bar-row { display: flex; align-items: center; gap: 8px; font-size: 12px; padding: 2px 0; }
+  .bar-row .name { width: 62px; color: var(--soft); }
+  .track { flex: 1; height: 8px; background: var(--sunken); border-radius: 5px; overflow: hidden; }
+  .fill { height: 100%; background: var(--accent); border-radius: 5px; }
+  .energy { font-size: 12.5px; color: var(--soft); background: var(--accent-soft); border-radius: 10px; padding: 9px 12px; margin-bottom: 12px; }
+  .row { display: flex; gap: 8px; }
+  button, .btn {
+    flex: 1; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line);
+    background: var(--raised); color: var(--ink); font-size: 12.5px; cursor: pointer; text-align: center; text-decoration: none;
+  }
+  .btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .connect { margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
+  .connect label { font-size: 11.5px; color: var(--faint); display: block; margin-bottom: 4px; }
+  .connect input { width: 100%; box-sizing: border-box; padding: 7px 9px; border: 1px solid var(--line); border-radius: 7px; background: var(--raised); color: var(--ink); font-size: 12px; }
+  .hint { font-size: 11px; color: var(--faint); margin-top: 8px; }
+  .empty { font-size: 12.5px; color: var(--soft); background: var(--raised); border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+  <header>
+    <span class="brand">Carbon Canvas</span>
+    <span class="status"><span id="dot" class="dot"></span><span id="status-text">tracking</span></span>
+  </header>
+
+  <div id="content"></div>
+
+  <div class="row">
+    <a id="dashboard-link" class="btn primary" target="_blank">Open dashboard</a>
+    <button id="pause-btn">Pause</button>
+  </div>
+
+  <div class="connect">
+    <label for="token">Sync token <span id="sync-state">(local-only mode — nothing leaves this device)</span></label>
+    <input id="token" type="password" placeholder="Paste from dashboard → Settings" />
+    <div class="hint">
+      We count sessions and activity size in your browser, then discard the
+      text. Your conversations are never read, stored, or sent.
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

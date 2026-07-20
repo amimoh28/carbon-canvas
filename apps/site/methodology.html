@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Methodology — Carbon Canvas</title>
+<meta name="description" content="How Carbon Canvas estimates the energy behind AI usage: versioned assumptions, cited sources, honest ranges, and what we deliberately don't claim." />
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<style>
+:root {
+  --bg: #faf9f7; --raised: #ffffff; --sunken: #f1efeb;
+  --ink: #23282e; --soft: #5c6470; --faint: #8b93a0;
+  --line: #e5e2dc; --accent: #3d6b5c; --accent-soft: #e6efeb;
+  --radius: 14px;
+  --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16181c; --raised: #1e2126; --sunken: #121417;
+    --ink: #e8e6e1; --soft: #a8adb5; --faint: #6f7681;
+    --line: #2b2f36; --accent: #7fb3a1; --accent-soft: #223530;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--font); font-size: 15.5px; line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); }
+.wrap { max-width: 880px; margin: 0 auto; padding: 40px 24px 90px; }
+.kicker {
+  font-size: .76rem; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--accent); font-weight: 650;
+}
+h1 { font-size: clamp(1.9rem, 4vw, 2.6rem); letter-spacing: -.02em; line-height: 1.12; margin: 10px 0 14px; }
+h2 { font-size: 1.2rem; letter-spacing: -.01em; margin: 0 0 10px; }
+.lede { color: var(--soft); max-width: 640px; font-size: 1.05rem; }
+.card {
+  background: var(--raised); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 26px 28px; margin-top: 22px;
+  box-shadow: 0 1px 2px rgba(35,40,46,.05), 0 4px 16px rgba(35,40,46,.05);
+}
+.pipeline {
+  background: var(--sunken); border-radius: 10px; padding: 14px 18px;
+  font-family: ui-monospace, SFMono-Regular, monospace; font-size: .85rem;
+  overflow-x: auto; white-space: nowrap; margin-top: 12px;
+}
+table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+th { text-align: left; color: var(--faint); font-weight: 550; font-size: .78rem; padding: 8px 12px 8px 0; border-bottom: 1px solid var(--line); }
+td { padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+td.k { font-weight: 600; white-space: nowrap; }
+td.v { white-space: nowrap; }
+.muted { color: var(--soft); }
+.faint { color: var(--faint); font-size: .85rem; }
+ul.claims { color: var(--soft); padding-left: 20px; margin: 8px 0; }
+ul.claims li { margin: 8px 0; }
+ul.claims strong { color: var(--ink); }
+.back { display: inline-block; margin-bottom: 26px; color: var(--soft); text-decoration: none; font-size: .9rem; }
+.back:hover { color: var(--ink); }
+@media (max-width: 640px) { td.v { white-space: normal; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">← Carbon Canvas</a>
+
+  <div class="kicker">Methodology · version e-0.2.0-prototype · reviewed 2026-07</div>
+  <h1>How we calculate</h1>
+  <p class="lede">
+    Every estimate is produced by a versioned, deterministic pipeline built on
+    published research — never a black box. The engine can never emit a single
+    number: every output is a range with a confidence score and its reasons.
+  </p>
+
+  <div class="card">
+    <h2>The pipeline</h2>
+    <div class="pipeline">
+      estimated tokens → × energy per 1k tokens (model-class band) → × datacenter overhead (PUE band) → energy range (Wh) → confidence score
+    </div>
+    <p class="faint" style="margin:12px 0 0">
+      Low bounds multiply with low bounds and high with high, so the final
+      range honestly compounds every layer of uncertainty.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>Assumptions</h2>
+    <p class="faint" style="margin:0 0 8px">
+      Everything we assume, why, and where it comes from. When an assumption
+      changes, the version number changes with it.
+    </p>
+    <div style="overflow-x:auto">
+    <table>
+      <thead><tr><th>Assumption</th><th>Value</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="k">Measurement boundary</td>
+          <td class="v">device × PUE</td>
+          <td class="muted">Host and idle-reserve overhead are not separately counted. Google's fleet measurement shows the comprehensive boundary is ~2.4× the narrow one (0.24 vs 0.10 Wh per median prompt) — so we may undercount, and we say so.</td>
+        </tr>
+        <tr>
+          <td class="k">Energy / 1k tokens — standard</td>
+          <td class="v">0.15–1.2 Wh</td>
+          <td class="muted">Three independent methods converge on ~0.2–0.4 Wh per median chat interaction: Google's fleet measurement, Epoch AI's estimate, and measured academic benchmarks (Luccioni et al., FAccT 2024).</td>
+        </tr>
+        <tr>
+          <td class="k">Energy / 1k tokens — light</td>
+          <td class="v">0.03–0.3 Wh</td>
+          <td class="muted">Nano/mini models measure ~70× below frontier reasoning models in the same benchmark.</td>
+        </tr>
+        <tr>
+          <td class="k">Energy / 1k tokens — reasoning</td>
+          <td class="v">0.4–3.5 Wh</td>
+          <td class="muted">Hidden thinking tokens are invisible to any client. Upper anchor reproduces the highest published long-prompt estimates (o3 ≈ 39 Wh at ~10k tokens). Those figures are inferred and contested — this class is capped at low confidence.</td>
+        </tr>
+        <tr>
+          <td class="k">Datacenter overhead (PUE)</td>
+          <td class="v">1.09–1.6×</td>
+          <td class="muted">Which facility serves a request is unknowable; band spans the best published hyperscaler fleet (Google, 1.09) to the industry average that has been flat for six years (Uptime Institute 2025, 1.54).</td>
+        </tr>
+        <tr>
+          <td class="k">Tokens per turn (unmeasured)</td>
+          <td class="v">150–900</td>
+          <td class="muted">Used only when no visible-text estimate exists; spans short Q&amp;A to long-form turns.</td>
+        </tr>
+        <tr>
+          <td class="k">Token estimate from text</td>
+          <td class="v">≈ chars ÷ 4</td>
+          <td class="muted">Standard English heuristic. Hidden reasoning, system, and tool tokens are invisible — real totals may be higher, and confidence is capped accordingly.</td>
+        </tr>
+        <tr>
+          <td class="k">Carbon display</td>
+          <td class="v">deferred</td>
+          <td class="muted">Grid factors are stored (41–700 gCO₂/kWh by region) but the serving region is unknowable — a ~17× spread. No per-prompt carbon number is shown until it can be shown honestly.</td>
+        </tr>
+        <tr>
+          <td class="k">Water display</td>
+          <td class="v">deferred</td>
+          <td class="muted">Published per-prompt water figures differ ~100× purely on measurement boundary (0.26 mL onsite-only vs 10–50 mL full-cycle). No agreed standard exists; deferring is the honest choice.</td>
+        </tr>
+        <tr>
+          <td class="k">Review cadence</td>
+          <td class="v">quarterly</td>
+          <td class="muted">One provider published a 33× efficiency improvement in a single year. Static numbers decay in months; staleness is itself a confidence input.</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Research sources</h2>
+    <div style="overflow-x:auto">
+    <table>
+      <thead><tr><th>Source</th><th>Organization</th><th>Year</th></tr></thead>
+      <tbody>
+        <tr><td><a href="https://arxiv.org/abs/2508.15734">Measuring the environmental impact of delivering AI at Google Scale</a><div class="faint">Fleet measurement: 0.24 Wh median prompt; the boundary-problem evidence; 33× one-year efficiency gain.</div></td><td>Google / DeepMind</td><td>2025</td></tr>
+        <tr><td><a href="https://epoch.ai/gradient-updates/how-much-energy-does-chatgpt-use">How much energy does ChatGPT use?</a><div class="faint">Independent bottom-up estimate: ~0.3 Wh per typical query.</div></td><td>Epoch AI</td><td>2025</td></tr>
+        <tr><td><a href="https://doi.org/10.1145/3630106.3658542">Power Hungry Processing</a><div class="faint">Measured open-model inference; the measured floor of our bands.</div></td><td>Luccioni, Jernite, Strubell (FAccT)</td><td>2024</td></tr>
+        <tr><td><a href="https://arxiv.org/abs/2505.09598">How Hungry is AI?</a><div class="faint">Inferred estimates for 30 closed models; contested; used as upper-bound anchor at low confidence.</div></td><td>Jegham et al.</td><td>2025</td></tr>
+        <tr><td><a href="https://huggingface.co/AIEnergyScore">AI Energy Score</a><div class="faint">Reproducible measured benchmark for open models.</div></td><td>Hugging Face / Salesforce</td><td>2025</td></tr>
+        <tr><td><a href="https://mistral.ai/news/our-contribution-to-a-global-environmental-standard-for-ai">Mistral Large 2 life-cycle assessment</a><div class="faint">First provider LCA; shows how much boundary choice moves numbers.</div></td><td>Mistral AI · Carbone 4 · ADEME</td><td>2025</td></tr>
+        <tr><td><a href="https://uptimeinstitute.com/resources/research-and-reports/uptime-institute-global-data-center-survey-results-2025">Global Data Center Survey 2025</a><div class="faint">Industry-average PUE 1.54, flat for six years.</div></td><td>Uptime Institute</td><td>2025</td></tr>
+        <tr><td><a href="https://datacenters.google/efficiency/">Fleet PUE disclosure</a><div class="faint">Trailing-twelve-month fleet PUE 1.09.</div></td><td>Google</td><td>2025</td></tr>
+        <tr><td><a href="https://www.iea.org/reports/electricity-2025/emissions">Electricity 2025 — Emissions</a><div class="faint">Global grid intensity ~445 gCO₂/kWh, trending down.</div></td><td>IEA</td><td>2025</td></tr>
+        <tr><td><a href="https://ember-energy.org/data/yearly-electricity-data/">Yearly Electricity Data</a><div class="faint">Open per-country grid factors (France ~41 → coal-heavy ~700).</div></td><td>Ember</td><td>2025</td></tr>
+        <tr><td><a href="https://arxiv.org/abs/2304.03271">Making AI Less Thirsty</a><div class="faint">Foundational onsite + off-site water methodology.</div></td><td>Li, Yang, Islam, Ren (UC Riverside)</td><td>2023</td></tr>
+        <tr><td><a href="https://www.nvidia.com/en-us/data-center/h100/">H100 / H200 / B200 specifications</a><div class="faint">TDP anchors; hardware absorbed into model-class bands because serving hardware is unobservable.</div></td><td>NVIDIA</td><td>2024</td></tr>
+        <tr><td><a href="https://platform.openai.com/tokenizer">Tokenizer documentation</a><div class="faint">Basis for the chars ÷ 4 token heuristic.</div></td><td>OpenAI / Anthropic docs</td><td>2024</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>What we deliberately don't claim</h2>
+    <ul class="claims">
+      <li><strong>No exact emissions per prompt.</strong> The exact hardware, batching, and datacenter serving a request are not public. Anyone offering a precise number is guessing without saying so.</li>
+      <li><strong>No carbon or water figures yet.</strong> Converting energy to carbon requires grid-location assumptions we can't verify. Those layers ship only after this methodology survives external review.</li>
+      <li><strong>No hidden-token visibility.</strong> Reasoning models think in tokens we cannot see; where that applies, we say so — and the true energy may be higher.</li>
+    </ul>
+    <p class="faint">
+      Prototype note: current bands are placeholders within the ranges reported
+      by the cited literature, re-reviewed quarterly. They must pass external
+      research review before any public launch — honesty about that is part of
+      the methodology too.
+    </p>
+  </div>
+</div>
+</body>
+</html>

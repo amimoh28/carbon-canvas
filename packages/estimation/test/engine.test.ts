@@ -5,7 +5,7 @@ import {
   humanComparison,
   classifyModel,
   METHODOLOGY_VERSION,
-} from "../src/index.js";
+} from "../src/index";
 
 describe("classifyModel", () => {
   it("maps null to unknown", () => {

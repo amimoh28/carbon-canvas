@@ -13,9 +13,9 @@ import {
   TOKENS_PER_TURN_BAND,
   classifyModel,
   type ModelClass,
-} from "./methodology.js";
+} from "./methodology";
 
-export * from "./methodology.js";
+export * from "./methodology";
 
 export type ConfidenceLevel = "high" | "medium" | "low";
 

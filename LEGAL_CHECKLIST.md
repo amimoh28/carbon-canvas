@@ -21,6 +21,7 @@
 - 🔲 **Price out solo-founder E&O / cyber liability insurance.** The practical way to offset the "no shield" gap for a data-handling product without incorporating yet.
 - ⏳ **GST/HST registration** — mandatory only once revenue passes $30,000 over four quarters; can register early voluntarily to claim input tax credits.
 - ⏳ **Revisit incorporation when:** cloud sync goes live with more real user data · bringing on the CTO with equity (IP assignment needs a corporate entity to assign *into*) · any outside funding · real revenue or user volume. **[lawyer — or Ownr/similar online incorporation service, ~$300–800, when triggered]**
+  - **When that day comes:** federal (CBCA) vs. provincial — federal is the default lean if you intend to raise money or expand beyond one province. **"Inc." / "Corp." / "Ltd." are legally interchangeable in Canada** — same entity type, pick whichever reads best as a brand. No LLC equivalent exists in Canada; a standard corporation is the right structure, not a niche alternative (ULC, cooperative, etc.).
 
 ### Product legal documents
 - ✅ **Privacy policy** — written, published, linked (required by Chrome Web Store and privacy law).

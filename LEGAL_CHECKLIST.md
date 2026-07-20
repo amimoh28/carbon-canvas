@@ -13,11 +13,14 @@
 ## Priority 1 — Now (before/at public launch)
 
 ### Business registration
-- 🔲 **Decide: sole proprietorship vs. incorporation.** You can operate as a sole proprietor today with zero paperwork, but you personally carry all liability. For a product that *handles other people's usage data*, incorporation is the liability shield that matters. Practical rule: **incorporate before the extension has real public users or any revenue.** **[lawyer — or Ownr/similar online incorporation service, ~$300–800]**
-- 🔲 **If incorporating, choose federal vs. provincial.** Federal (CBCA) gives Canada-wide name protection and looks standard to future investors; provincial is slightly simpler. Most Canadian startups that intend to raise money go **federal**.
-- 🔲 **Register the business name** ("Carbon Canvas" or a numbered company operating as Carbon Canvas). A NUANS name search comes with this.
-- 🔲 **Get a CRA Business Number** (comes automatically with incorporation).
-- ⏳ **GST/HST registration** — mandatory only once revenue passes $30,000 over four quarters; you can register early voluntarily to claim input tax credits.
+- ✅ **Decision made: operating as a sole proprietorship while building.** Deliberate choice to keep things simple pre-traction; revisit at the triggers below. **Known tradeoff accepted: no liability shield — personal assets are exposed if something goes wrong.** Mitigate with the ToS + insurance items below rather than treating this as "handled."
+- 🔲 **Register the business name** ("Carbon Canvas") with your province (ServiceOntario / BC Registry Services / Alberta Registries / etc. — whichever applies). Required because you're operating under a name other than your own legal name. ~$60–80, online, no lawyer needed.
+- 🔲 **Get a CRA Business Number** — free, a few minutes online. Not mandatory yet at $0 revenue, but simple to get now.
+- 🔲 **Open a separate business bank account** once the name registration comes through.
+- 🔲 **Track every business expense from day one** (Vercel, Chrome dev fee, domain, etc.) — sole prop income/expenses flow onto your personal return via the **T2125 form**.
+- 🔲 **Price out solo-founder E&O / cyber liability insurance.** The practical way to offset the "no shield" gap for a data-handling product without incorporating yet.
+- ⏳ **GST/HST registration** — mandatory only once revenue passes $30,000 over four quarters; can register early voluntarily to claim input tax credits.
+- ⏳ **Revisit incorporation when:** cloud sync goes live with more real user data · bringing on the CTO with equity (IP assignment needs a corporate entity to assign *into*) · any outside funding · real revenue or user volume. **[lawyer — or Ownr/similar online incorporation service, ~$300–800, when triggered]**
 
 ### Product legal documents
 - ✅ **Privacy policy** — written, published, linked (required by Chrome Web Store and privacy law).
@@ -38,10 +41,10 @@
 ## Priority 2 — Soon (first real users / first dollar)
 
 ### Intellectual property
-- 🔲 **Trademark search before you fall further in love with the name.** Search CIPO (Canada) and USPTO (US) for "Carbon Canvas" in software classes — conflicts are possible with a name this evocative. Better to know now.
-- ⏳ **File trademark** (Canada first, US when you have US users) — classes 9 (software) and 42 (SaaS). Roughly $500–1,000/class with a service, more with a firm. Trigger: name search comes back clean **and** the product has public traction. **[lawyer or trademark agent]**
+- 🔲 **Trademark search in progress.** One USPTO hit found so far: "CARBON & CANVAS," Class 16 (stickers, art prints) — different class from software (9) / SaaS (42), so low conflict risk *unless* Carbon Canvas ever sells physical merch under the same name. Still need: Class 9/42 specifically, plus CIPO (Canada) — the US search alone doesn't clear you here.
+- ⏳ **File trademark** (Canada first, US when you have US users) — classes 9 (software) and 42 (SaaS). Roughly $500–1,000/class with a service, more with a firm. Trigger: fuller search comes back clean **and** the product has public traction. **[lawyer or trademark agent]**
 - 🔲 **Copyright is automatic** — no registration needed for the code/site/docs. But:
-- ⏳ **IP assignment to the corporation** — once incorporated, formally assign all the IP you created personally (code, brand, documents) to the company. Standard one-page founder IP assignment. Matters enormously for future fundraising/acquisition. **[lawyer — cheap, do it at incorporation]**
+- ⏳ **IP assignment to the (future) corporation** — while sole proprietorship continues, IP you create is legally yours personally, which is fine for now. The moment you incorporate, formally assign all IP created up to that point (code, brand, documents) into the company via a standard founder IP assignment. Matters enormously for future fundraising/acquisition — don't skip it at incorporation time. **[lawyer — cheap, do it at incorporation]**
 - 🔲 **Pick an open-source license for the extension** — the strategy docs recommend open-sourcing the extension as the privacy trust-proof. Apache-2.0 (patent-safe) or MIT (simplest) are the standard choices. Decide *before* publicizing the repo.
 - ✅ **Patents: deliberately skipped for now** — consistent with the master doc's IP strategy (the methodology is open by design; the moat is trust + data, not patents).
 - 🔲 **Lock down handles/domains** you care about (site domain, social handles) before the name is visible in the Chrome store.
@@ -71,15 +74,18 @@
 
 ## The one-week action list (if you do nothing else)
 
-1. **Draft Terms of Service** (I can produce a draft for lawyer review).
-2. **Run the free trademark search** on CIPO + USPTO for "Carbon Canvas."
-3. **Book one hour with a startup lawyer** about incorporation timing + the ToS draft.
-4. **Set up the domain email** and swap it onto the privacy page.
-5. **Open the separate bank account** the day incorporation papers arrive.
+1. **Register the sole proprietorship business name** with your province.
+2. **Draft Terms of Service** (I can produce a draft for lawyer review).
+3. **Finish the trademark search** — Class 9/42 on USPTO + full search on CIPO.
+4. **Price out solo-founder E&O / cyber liability insurance.**
+5. **Set up the domain email** and swap it onto the privacy page.
+6. **Open the separate business bank account** once the name registration comes through.
 
 ## Already covered (give yourself credit)
 
+- ✅ Sole proprietorship decision made (accepted tradeoff, revisit triggers set)
 - ✅ Privacy policy written, published, and linkable (Chrome Web Store requirement)
+- ✅ Preliminary trademark search started (one Class 16 hit, low-risk, different from software classes)
 - ✅ Privacy-by-architecture: metadata-only schema, local-first default, export + delete built in
 - ✅ Honest-claims posture: ranges, confidence scores, published methodology, explicit "what we don't claim" — your best greenwashing-law defense
 - ✅ Chrome Web Store developer registration ($5) — done, extension in review

@@ -167,6 +167,6 @@ export function humanComparison(whLow: number, whHigh: number): string {
     const pct = Math.min(100, Math.round((mid / 15) * 100));
     return `Roughly ${pct}% of one full phone charge.`;
   }
-  const charges = round(mid / 15, 1);
+  const charges = Math.round(mid / 15);
   return `Roughly ${charges} phone charges.`;
 }

@@ -10,8 +10,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>AI Energy Usage Calculator | Carbon Canvas</title>
-<meta name="description" content="Use the free Carbon Canvas AI energy calculator to estimate the electricity and water behind your ChatGPT, Claude, Gemini and other AI usage." />
+<title>AI Energy Calculator for Individuals &amp; Higher Education | Carbon Canvas</title>
+<meta name="description" content="Estimate AI energy use for one person, a university course or a voluntary campus cohort. Free, private and transparent—no signup required." />
 <meta name="robots" content="index, follow, max-image-preview:large" />
 <link rel="canonical" href="https://carboncanvas.live/calculator" />
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
@@ -20,11 +20,18 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Carbon Canvas" />
 <meta property="og:url" content="https://carboncanvas.live/calculator" />
-<meta property="og:title" content="Free AI Energy Usage Calculator | Carbon Canvas" />
-<meta property="og:description" content="Estimate the energy and water behind your ChatGPT, Claude, Gemini and other AI usage. Free, private and browser-based." />
+<meta property="og:title" content="AI Energy Calculator for Individuals &amp; Higher Education" />
+<meta property="og:description" content="Estimate the energy behind AI use for one person, a course or a voluntary campus cohort." />
+<meta property="og:image" content="https://carboncanvas.live/social-preview.png" />
+<meta property="og:image:type" content="image/png" />
+<meta property="og:image:width" content="1254" />
+<meta property="og:image:height" content="1254" />
+<meta property="og:image:alt" content="Carbon Canvas logo on a navy background" />
 <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="Free AI Energy Usage Calculator" />
-<meta name="twitter:description" content="Estimate the energy and water behind your everyday AI usage with Carbon Canvas." />
+<meta name="twitter:title" content="AI Energy Calculator for People and Campus Cohorts" />
+<meta name="twitter:description" content="Free, private AI energy scenarios for individuals, courses and voluntary higher-education cohorts." />
+<meta name="twitter:image" content="https://carboncanvas.live/social-preview.png" />
+<meta name="twitter:image:alt" content="Carbon Canvas logo on a navy background" />
 
 <script type="application/ld+json">
 {
@@ -41,7 +48,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     "price": "0",
     "priceCurrency": "USD"
   },
-  "description": "A free browser-based calculator that estimates the energy and water associated with AI usage."
+  "description": "A free browser-based calculator that estimates AI energy and water scenarios for individuals, courses and voluntary higher-education cohorts."
 }
 </script>
 <style>
@@ -70,6 +77,9 @@ a { color: var(--accent); }
 .wrap { max-width: 940px; margin: 0 auto; padding: 40px 24px 90px; }
 .back { display: inline-block; margin-bottom: 30px; color: var(--soft); text-decoration: none; font-size: .9rem; }
 .back:hover { color: var(--ink); }
+.topline { display:flex; justify-content:space-between; align-items:center; gap:18px; margin-bottom:30px; }
+.topline .back { margin-bottom:0; }
+.context-link { color:var(--accent); text-decoration:none; font-size:.88rem; font-weight:600; }
 .kicker { font-size: .76rem; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); font-weight: 650; }
 h1 { font-size: clamp(2rem, 4.5vw, 2.9rem); letter-spacing: -.025em; line-height: 1.1; margin: 10px 0 12px; }
 .lede { color: var(--soft); max-width: 620px; font-size: 1.08rem; }
@@ -88,6 +98,17 @@ h1 { font-size: clamp(2rem, 4.5vw, 2.9rem); letter-spacing: -.025em; line-height
 .panel h2 { font-size: 1.05rem; margin: 0 0 4px; }
 .panel .hint { color: var(--faint); font-size: .84rem; margin: 0 0 18px; }
 
+.scope-switch {
+  display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:18px 0 14px;
+  background:var(--sunken); border-radius:12px; padding:5px;
+}
+.scope-switch button {
+  min-height:42px; border:0; border-radius:9px; background:transparent; color:var(--soft);
+  font:600 .88rem var(--font); cursor:pointer;
+}
+.scope-switch button.active { background:var(--raised); color:var(--ink); box-shadow:0 1px 4px rgba(35,40,46,.09); }
+.cohort-fields { border:1px solid var(--line); background:var(--accent-soft); border-radius:12px; padding:4px 16px 14px; margin-bottom:18px; }
+.cohort-fields[hidden] { display:none; }
 .presets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 22px; }
 .presets button {
   display: flex; flex-direction: column; gap: 3px; align-items: flex-start;
@@ -172,25 +193,42 @@ summary { cursor: pointer; color: var(--accent); font-size: .86rem; }
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 <div class="wrap">
-  <a class="back" href="/">← Carbon Canvas</a>
+  <div class="topline">
+    <a class="back" href="/">← Carbon Canvas</a>
+    <span style="display:flex;gap:14px;flex-wrap:wrap;justify-content:flex-end">
+      <a class="context-link" href="/higher-education">Higher education</a>
+      <a class="context-link" href="/enterprise">Companies →</a>
+    </span>
+  </div>
 
-  <div class="kicker">Free estimator</div>
-  <h1>How much energy does your AI use?</h1>
+  <div class="kicker">Free · private · no signup</div>
+  <h1>Estimate AI energy for yourself, a course, or a campus cohort.</h1>
   <p class="lede">
-    A rough, honest estimate — in about ten seconds. No account, no tracking,
-    nothing leaves this page. Move the numbers and watch the range change.
+    Model one person or a voluntary group in about ten seconds. No account,
+    no form submission, and none of the values you enter leave this page.
   </p>
 
   <div class="calc">
     <!-- Inputs -->
     <div class="panel">
-      <h2>Tell us roughly how you use AI</h2>
-      <p class="hint">Start with the closest match, then fine-tune if you like.</p>
+      <h2 id="inputTitle">Build an individual scenario</h2>
+      <p class="hint" id="inputHint">Start with the closest match, then fine-tune if you like.</p>
+
+      <div class="scope-switch" role="group" aria-label="Estimate scope">
+        <button type="button" data-scope="individual" class="active">Individual</button>
+        <button type="button" data-scope="cohort">Course or cohort</button>
+      </div>
 
       <div class="presets" id="presets">
-        <button data-preset="light"><b>Light</b><small>A few times a week</small></button>
-        <button data-preset="regular" class="active"><b>Regular</b><small>Part of your day</small></button>
-        <button data-preset="heavy"><b>Heavy</b><small>All day, every day</small></button>
+        <button type="button" data-preset="light"><b>Light</b><small>A few times a week</small></button>
+        <button type="button" data-preset="regular" class="active"><b>Regular</b><small>Part of the day</small></button>
+        <button type="button" data-preset="heavy"><b>Heavy</b><small>Frequent long tasks</small></button>
+      </div>
+
+      <div class="cohort-fields" id="cohortFields" hidden>
+        <label for="participants">Voluntary participants</label>
+        <input type="number" id="participants" min="2" max="10000" value="30" inputmode="numeric" />
+        <p class="hint">The activity settings below are applied per participant. This models a scenario; it does not measure campus-wide usage.</p>
       </div>
 
       <label for="perday">
@@ -215,7 +253,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <!-- Result -->
     <div class="panel result">
-      <div class="kicker">Your estimated AI energy — per month</div>
+      <div class="kicker" id="resultKicker">Your estimated AI energy — per month</div>
       <div class="bignum" id="energy">—</div>
       <div class="compare" id="compare">—</div>
       <ul class="examples" id="examples"></ul>
@@ -256,23 +294,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- Conversion CTA — the point of the tool -->
   <div class="cta">
     <div>
-      <h3>This is a guess. Want the real thing?</h3>
+      <h3 id="ctaTitle">This is a scenario. Want automatic tracking?</h3>
       <p>
-        The Carbon Canvas extension measures your actual AI usage automatically —
-        privately, in your browser, without ever reading your conversations.
+        The Carbon Canvas extension is being prepared to estimate your AI activity
+        privately in your browser without reading your conversations.
       </p>
     </div>
-    <a class="btn" href="/waitlist">Join the waitlist</a>
+    <a class="btn" id="ctaLink" href="/waitlist">Join the extension waitlist</a>
   </div>
 
   <p class="disclaimer">
-    These are rough scenario estimates for curiosity and learning, not a formal
-    carbon audit. Energy is our most confident figure; the water range is far
-    rougher and shown only for perspective. Both are built from the same
-    published research behind our <a href="/methodology">methodology</a>
-    (e-0.2.0), expressed as ranges because the exact infrastructure serving any
-    AI request isn't public. We don't show a carbon number here — that needs
-    location data we won't guess at.
+    These are rough scenarios for learning and pilot planning, not observed usage,
+    a formal carbon audit, or reporting-grade emissions data. Cohort mode multiplies
+    a representative per-person scenario, so it does not prove how an institution
+    actually uses AI. Energy is our strongest estimate; water is much rougher and
+    shown only for perspective. See the published <a href="/methodology">methodology</a>
+    (e-0.2.0) and its limitations.
   </p>
 </div>
 
@@ -325,11 +362,12 @@ const phrase = (n, one, many) => `${n.toLocaleString()} ${n === 1 ? one : many}`
 
 function fmtEnergy(lo, hi) {
   const f = (wh) => {
-    if (hi >= 1000) return (wh / 1000).toFixed(wh / 1000 < 10 ? 2 : 1); // kWh
+    if (hi >= 1000000) return (wh / 1000000).toFixed(wh / 1000000 < 10 ? 2 : 1);
+    if (hi >= 1000) return (wh / 1000).toFixed(wh / 1000 < 10 ? 2 : 1);
     if (wh < 10) return wh.toFixed(1);
     return String(Math.round(wh));
   };
-  const unit = hi >= 1000 ? "kWh" : "Wh";
+  const unit = hi >= 1000000 ? "MWh" : hi >= 1000 ? "kWh" : "Wh";
   return `≈ ${f(lo)}–${f(hi)} ${unit}`;
 }
 
@@ -399,33 +437,60 @@ function waterComparison(mid) {
   return `Very roughly ${phrase(n, "full bathtub", "full bathtubs")} of water.`;
 }
 
+function activeScope() {
+  const active = document.querySelector(".scope-switch button.active");
+  return active ? active.dataset.scope : "individual";
+}
+
 function update() {
+  const scope = activeScope();
   const perDay = +$("perday").value;
   const daysPerWeek = +$("days").value;
   const band = BANDS[$("use").value];
+  const participants = scope === "cohort"
+    ? Math.max(2, Math.min(10000, +$("participants").value || 2))
+    : 1;
 
-  const monthlyMsgs = perDay * daysPerWeek * WEEKS_PER_MONTH;
-  const lo = monthlyMsgs * band.lo;   // Wh
-  const hi = monthlyMsgs * band.hi;   // Wh
+  const monthlyMsgsPerPerson = perDay * daysPerWeek * WEEKS_PER_MONTH;
+  const monthlyMsgs = monthlyMsgsPerPerson * participants;
+  const lo = monthlyMsgs * band.lo;
+  const hi = monthlyMsgs * band.hi;
   const mid = (lo + hi) / 2;
+
+  $("cohortFields").hidden = scope !== "cohort";
+  $("inputTitle").textContent = scope === "cohort" ? "Build a course or cohort scenario" : "Build an individual scenario";
+  $("inputHint").textContent = scope === "cohort"
+    ? "Choose a representative per-participant pattern, then set the voluntary cohort size."
+    : "Start with the closest match, then fine-tune if you like.";
+  $("resultKicker").textContent = scope === "cohort"
+    ? "Estimated cohort AI energy — per month"
+    : "Your estimated AI energy — per month";
 
   $("perdayLabel").textContent = perDay;
   $("energy").textContent = fmtEnergy(lo, hi);
   $("compare").textContent = comparison(mid);
   $("examples").innerHTML = energyExamples(mid);
-  $("permonth").textContent =
-    `Based on about ${Math.round(monthlyMsgs).toLocaleString()} messages a month (${band.note}).`;
+  $("permonth").textContent = scope === "cohort"
+    ? "Based on about " + Math.round(monthlyMsgs).toLocaleString() + " messages a month across " + participants.toLocaleString() + " participants (" + band.note + " per participant)."
+    : "Based on about " + Math.round(monthlyMsgs).toLocaleString() + " messages a month (" + band.note + ").";
 
-  // Water: energy(kWh) × wide L/kWh band. Deliberately the roughest number here.
   const wLo = (lo / 1000) * WATER_L_PER_KWH.lo;
   const wHi = (hi / 1000) * WATER_L_PER_KWH.hi;
   $("water").textContent = fmtWater(wLo, wHi);
   $("waterCmp").textContent = waterComparison((wLo + wHi) / 2);
 
-  // Confidence: deep/reasoning use is the least certain (hidden tokens).
-  $("confword").textContent = $("use").value === "deep" ? "Low" : "Low–medium";
+  $("confword").textContent = $("use").value === "deep" || scope === "cohort" ? "Low" : "Low–medium";
 
-  // Sync preset highlight
+  if (scope === "cohort") {
+    $("ctaTitle").textContent = "Planning a voluntary higher-education pilot?";
+    $("ctaLink").textContent = "Explore a founding pilot";
+    $("ctaLink").href = "/higher-education#pilot";
+  } else {
+    $("ctaTitle").textContent = "This is a scenario. Want automatic tracking?";
+    $("ctaLink").textContent = "Join the extension waitlist";
+    $("ctaLink").href = "/waitlist";
+  }
+
   document.querySelectorAll("#presets button").forEach((b) => {
     const p = PRESETS[b.dataset.preset];
     b.classList.toggle(
@@ -444,7 +509,22 @@ document.querySelectorAll("#presets button").forEach((b) => {
     update();
   });
 });
-["perday", "days", "use"].forEach((id) => $(id).addEventListener("input", update));
+document.querySelectorAll(".scope-switch button").forEach((button) => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".scope-switch button").forEach((item) => item.classList.remove("active"));
+    button.classList.add("active");
+    update();
+  });
+});
+
+["perday", "days", "use", "participants"].forEach((id) => $(id).addEventListener("input", update));
+
+const requestedScope = new URLSearchParams(location.search).get("scope");
+if (requestedScope === "cohort") {
+  document.querySelectorAll(".scope-switch button").forEach((item) => {
+    item.classList.toggle("active", item.dataset.scope === "cohort");
+  });
+}
 update();
 </script>
 </body>

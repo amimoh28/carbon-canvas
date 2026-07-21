@@ -11,7 +11,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Privacy Policy | Carbon Canvas</title>
-<meta name="description" content="Learn how Carbon Canvas protects your privacy while estimating AI energy use with limited metadata and local-first browser storage." />
+<meta name="description" content="Learn how Carbon Canvas protects privacy across local-first AI energy estimates, extension use, waitlists and voluntary institutional pilots." />
 <meta name="robots" content="noindex, follow" />
 <link rel="canonical" href="https://carboncanvas.live/privacy" />
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
@@ -21,7 +21,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta property="og:url" content="https://carboncanvas.live/privacy" />
 <meta property="og:title" content="Privacy Policy | Carbon Canvas" />
 <meta property="og:description" content="How Carbon Canvas handles AI usage metadata while keeping conversations private." />
+<meta property="og:image" content="https://carboncanvas.live/social-preview.png" />
+<meta property="og:image:alt" content="Carbon Canvas logo on a navy background" />
 <meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Privacy Policy | Carbon Canvas" />
+<meta name="twitter:description" content="Privacy boundaries for Carbon Canvas estimates, extension use, and institutional pilots." />
+<meta name="twitter:image" content="https://carboncanvas.live/social-preview.png" />
 <style>
 :root {
   --bg: #faf9f7; --raised: #ffffff; --sunken: #f1efeb;
@@ -67,6 +72,9 @@ ul.never li::marker { color: #8a6d5b; }
 ul.collect li::marker { color: var(--accent); }
 .back { display: inline-block; margin-bottom: 26px; color: var(--soft); text-decoration: none; font-size: .9rem; }
 .back:hover { color: var(--ink); }
+.topline { display:flex; justify-content:space-between; align-items:center; gap:18px; margin-bottom:26px; }
+.topline .back { margin-bottom:0; }
+.context-link { color:var(--accent); text-decoration:none; font-size:.88rem; font-weight:600; }
 .closing {
   margin-top: 26px; padding: 20px 24px;
   border-left: 3px solid var(--accent);
@@ -82,7 +90,13 @@ ul.collect li::marker { color: var(--accent); }
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 <div class="wrap">
-  <a class="back" href="/">← Carbon Canvas</a>
+  <div class="topline">
+    <a class="back" href="/">← Carbon Canvas</a>
+    <span style="display:flex;gap:14px;flex-wrap:wrap;justify-content:flex-end">
+      <a class="context-link" href="/higher-education">Higher education</a>
+      <a class="context-link" href="/enterprise">Companies →</a>
+    </span>
+  </div>
 
   <div class="kicker">Privacy Policy</div>
   <h1>Carbon Canvas — Privacy Policy</h1>
@@ -146,6 +160,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       content) is stored on our secure backend so you can access your dashboard
       across devices. Cloud sync is off by default and fully under your
       control. You can disable it and keep everything local at any time.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>Website forms</h2>
+    <p>
+      The extension does not collect your identity. If you separately submit the
+      waitlist, higher-education pilot, or company pilot form, we collect the contact details and
+      institutional information you choose to provide so we can respond to that request.
+      Form submissions are not combined with local extension activity.
+    </p>
+  </div>
+
+  <div class="card">
+    <h2>Institutional pilots</h2>
+    <p>
+      Any higher-education or company pilot will be voluntary and documented before participation
+      begins. Participants will receive a clear description of the metadata involved,
+      where it is stored, who can access it, how long it is retained, and how to leave
+      the pilot.
+    </p>
+    <p>
+      Participating institutions and companies will never receive prompts, responses, files, or conversation
+      content from Carbon Canvas. Any aggregate reporting design and privacy thresholds
+      will be agreed during institutional review rather than assumed in advance.
     </p>
   </div>
 

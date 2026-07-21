@@ -65,12 +65,14 @@ input, select { width: 100%; min-height: 46px; padding: 0 12px; border: 1px soli
 input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
 .btn { display: inline-block; width: 100%; background: var(--ink); color: var(--bg); border: none; border-radius: 10px; padding: 14px 22px; font-size: 1rem; font-weight: 600; font-family: var(--font); cursor: pointer; margin-top: 22px; }
 .btn:hover { opacity: .9; }
-.err { color: #a04545; font-size: .85rem; margin-top: 10px; min-height: 1em; }
+.btn:disabled { cursor: wait; opacity: .62; }
+.err { color: #a04545; font-size: .85rem; margin-top: 10px; min-height: 1.3em; }
 .privacy-note { margin-top: 16px; font-size: .82rem; color: var(--faint); border-left: 3px solid var(--line); padding-left: 14px; }
 .success { display: none; text-align: center; padding: 20px 0; }
 .success .check { width: 54px; height: 54px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; margin: 0 auto 16px; font-size: 1.6rem; }
 .success h2 { font-size: 1.4rem; margin: 0 0 8px; }
 .success p { color: var(--soft); margin: 0 0 18px; }
+.field-trap { position:absolute !important; left:-10000px !important; width:1px !important; height:1px !important; overflow:hidden !important; }
 </style>
 </head>
 <body>
@@ -100,9 +102,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 
   <div class="card">
-    <form id="waitlist">
+    <form id="waitlist" novalidate>
       <label for="name">Your name</label>
-      <input id="name" name="name" type="text" autocomplete="name" required />
+      <input id="name" name="name" type="text" autocomplete="name" maxlength="100" required />
 
       <label for="age">Age group</label>
       <select id="age" name="age" required>
@@ -116,19 +118,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </select>
 
       <label for="email">Email <span class="opt">(email or phone — at least one)</span></label>
-      <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" />
+      <input id="email" name="email" type="email" autocomplete="email" maxlength="160" placeholder="you@example.com" />
 
       <label for="phone">Phone <span class="opt">(optional if you gave an email)</span></label>
-      <input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="+1 555 000 0000" />
+      <input id="phone" name="phone" type="tel" autocomplete="tel" maxlength="40" placeholder="+1 555 000 0000" />
 
-      <button class="btn" type="submit">Join the waitlist</button>
-      <div class="err" id="err" role="alert"></div>
+      <div class="field-trap" aria-hidden="true">
+        <label for="companyWebsite">Company website</label>
+        <input id="companyWebsite" name="companyWebsite" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <button class="btn" id="submitBtn" type="submit">Join the waitlist</button>
+      <div class="err" id="err" role="alert" aria-live="polite"></div>
     </form>
 
-    <div class="success" id="success">
+    <div class="success" id="success" aria-live="polite">
       <div class="check">✓</div>
       <h2>You're on the list.</h2>
-      <p>Thanks — we'll be in touch the moment the extension is live.</p>
+      <p>Your signup was saved successfully. We'll be in touch when the extension is ready.</p>
       <a class="back" href="/" style="margin:0">← Back to Carbon Canvas</a>
     </div>
   </div>
@@ -140,51 +147,65 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </p>
 </div>
 
-<!-- Hidden target so the Google Form submission doesn't navigate the page away -->
-<iframe name="cc_sink" style="display:none" title="submit"></iframe>
-
 <script>
-const WAITLIST_ENDPOINT = "https://script.google.com/macros/s/AKfycbzh3SPNO03Xj2jwPxKIbDDRe6P_LdOYKxq5gu_malOHcNBxlcHU-MxLIsRcFVr5JxG09w/exec";
-
 const form = document.getElementById("waitlist");
 const errEl = document.getElementById("err");
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
+const submitBtn = document.getElementById("submitBtn");
+
+function setSubmitting(isSubmitting) {
+  submitBtn.disabled = isSubmitting;
+  submitBtn.textContent = isSubmitting ? "Saving your spot…" : "Join the waitlist";
+}
+
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
   errEl.textContent = "";
 
   const name = document.getElementById("name").value.trim();
   const age = document.getElementById("age").value;
   const email = document.getElementById("email").value.trim();
   const phone = document.getElementById("phone").value.trim();
+  const companyWebsite = document.getElementById("companyWebsite").value.trim();
 
   if (!name) return (errEl.textContent = "Please add your name.");
   if (!age) return (errEl.textContent = "Please pick an age group.");
-  if (!email && !phone) return (errEl.textContent = "Please add an email or a phone number.");
+  if (!email && !phone) return (errEl.textContent = "Please add an email address or phone number.");
+  if (email && !document.getElementById("email").checkValidity()) {
+    return (errEl.textContent = "Please enter a valid email address.");
+  }
 
-  // Submit directly to Apps Script through the hidden iframe. Standard field
-  // names are available in Apps Script as e.parameter.name, age, email, phone.
-  const submission = document.createElement("form");
-  submission.action = WAITLIST_ENDPOINT;
-  submission.method = "POST";
-  submission.target = "cc_sink";
-  const add = (key, value) => {
-    const input = document.createElement("input");
-    input.type = "hidden";
-    input.name = key;
-    input.value = value;
-    submission.appendChild(input);
-  };
-  add("name", name);
-  add("age", age);
-  add("email", email);
-  add("phone", phone);
-  document.body.appendChild(submission);
-  submission.submit();
-  submission.remove();
+  setSubmitting(true);
 
-  // Show the thank-you either way (so the UX works while you finish setup).
-  form.style.display = "none";
-  document.getElementById("success").style.display = "block";
+  try {
+    const response = await fetch("/api/waitlist", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name,
+        age,
+        email,
+        phone,
+        companyWebsite,
+        source: window.location.pathname,
+      }),
+    });
+
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || result.ok !== true) {
+      throw new Error(result.message || "We could not save your signup. Please try again.");
+    }
+
+    form.style.display = "none";
+    document.getElementById("success").style.display = "block";
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event: "waitlist_signup_success" });
+  } catch (error) {
+    errEl.textContent = error.message || "We could not save your signup. Please try again.";
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event: "waitlist_signup_error" });
+  } finally {
+    setSubmitting(false);
+  }
 });
 </script>
 </body>

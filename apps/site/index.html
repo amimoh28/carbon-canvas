@@ -17,7 +17,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="canonical" href="https://carboncanvas.live/" />
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
 <meta name="theme-color" content="#faf9f7" />
-
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Carbon Canvas" />
 <meta property="og:url" content="https://carboncanvas.live/" />
@@ -34,7 +33,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <meta name="twitter:description" content="Cross-platform AI energy estimates with transparent ranges, confidence levels and no collection of prompt content." />
 <meta name="twitter:image" content="https://carboncanvas.live/social-preview.png" />
 <meta name="twitter:image:alt" content="Carbon Canvas logo on a navy background" />
-
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -76,7 +74,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   }
 }
 * { box-sizing:border-box; }
-html { scroll-behavior:smooth; }
+html { scroll-behavior:smooth; scroll-padding-top:92px; }
 body {
   margin:0; background:var(--bg); color:var(--ink); font-family:var(--font);
   font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden;
@@ -102,16 +100,38 @@ a { color:inherit; }
   letter-spacing:-.03em; font-weight:720; max-width:760px; margin:0 0 18px;
 }
 .lede { color:var(--soft); font-size:1.08rem; line-height:1.7; max-width:680px; }
-.eyebrow-note { color:var(--faint); font-size:.85rem; margin-top:14px; }
 .rv { opacity:0; transform:translateY(24px); transition:opacity .8s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1); }
 .rv.from-left { transform:translateX(-32px); }
 .rv.from-right { transform:translateX(32px); }
 .rv.shown { opacity:1; transform:none; }
 
+/* top navigation */
+.site-header {
+  position:fixed; inset:0 0 auto; z-index:100;
+  border-bottom:1px solid color-mix(in srgb,var(--line) 82%,transparent);
+  background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+}
+.site-nav {
+  max-width:1180px; min-height:72px; margin:0 auto; padding:0 28px;
+  display:flex; align-items:center; justify-content:space-between; gap:28px;
+}
+.site-brand {
+  flex:none; text-decoration:none; font-weight:760; letter-spacing:-.025em;
+  font-size:1.05rem; white-space:nowrap;
+}
+.site-links { display:flex; align-items:center; justify-content:flex-end; gap:26px; }
+.site-links a {
+  color:var(--soft); text-decoration:none; font-size:.9rem; font-weight:560;
+  white-space:nowrap; transition:color .18s ease;
+}
+.site-links a:hover,.site-links a:focus-visible { color:var(--ink); }
+.site-links a.enterprise { color:var(--ink); font-weight:680; }
+
 /* hero */
 .hero {
   position:relative; min-height:100vh; display:flex; align-items:center;
-  padding:96px 28px 72px; overflow:hidden;
+  padding:154px 28px 82px; overflow:hidden;
 }
 .hero::before {
   content:""; position:absolute; inset:auto -15% -36% 28%; height:72%;
@@ -133,22 +153,14 @@ a { color:inherit; }
 .hero h1 .privacy { color:var(--accent); }
 .hero-sub { color:var(--soft); font-size:clamp(1.08rem,1.8vw,1.35rem); max-width:760px; line-height:1.66; }
 .hero-cta { display:flex; gap:12px; flex-wrap:wrap; margin-top:34px; }
-.hero-proof {
-  display:flex; gap:14px 24px; flex-wrap:wrap; margin-top:28px;
-  color:var(--soft); font-size:.88rem;
-}
+.hero-proof { display:flex; gap:14px 24px; flex-wrap:wrap; margin-top:28px; color:var(--soft); font-size:.88rem; }
 .hero-proof span::before { content:"✓"; color:var(--accent); margin-right:8px; font-weight:700; }
 
-/* estimator band */
 .estimator-band { background:var(--accent-soft); border-block:1px solid var(--line); padding:52px 28px; }
 .estimator-row { display:flex; align-items:center; justify-content:space-between; gap:28px; flex-wrap:wrap; }
 
-/* difference */
 .usp-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-top:42px; }
-.usp-card {
-  background:var(--raised); border:1px solid var(--line); border-radius:var(--radius);
-  padding:28px; box-shadow:0 1px 2px rgba(35,40,46,.04);
-}
+.usp-card { background:var(--raised); border:1px solid var(--line); border-radius:var(--radius); padding:28px; box-shadow:0 1px 2px rgba(35,40,46,.04); }
 .usp-card .n { color:var(--accent); font-size:.77rem; letter-spacing:.12em; font-weight:750; }
 .usp-card h3 { font-size:1.2rem; margin:9px 0 8px; }
 .usp-card p { color:var(--soft); margin:0; }
@@ -159,7 +171,6 @@ a { color:inherit; }
 .category-note p { margin:0; color:var(--earth-soft); max-width:780px; }
 .category-note strong { color:var(--earth-ink); }
 
-/* privacy ledger */
 .earthbg { background:var(--earth); color:var(--earth-ink); }
 .earthbg .lede { color:var(--earth-soft); }
 .ledger {
@@ -175,12 +186,8 @@ a { color:inherit; }
 .ledger .yes { color:#8fc4b1; }
 .ledger .no { color:#c49b83; }
 
-/* product */
 .product-grid { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(300px,.9fr); gap:34px; align-items:start; margin-top:44px; }
-.receipt,.glance {
-  background:var(--raised); border:1px solid var(--line); border-radius:var(--radius);
-  box-shadow:0 3px 9px rgba(35,40,46,.05),0 24px 60px rgba(35,40,46,.09);
-}
+.receipt,.glance { background:var(--raised); border:1px solid var(--line); border-radius:var(--radius); box-shadow:0 3px 9px rgba(35,40,46,.05),0 24px 60px rgba(35,40,46,.09); }
 .receipt { padding:28px 30px; font-variant-numeric:tabular-nums; }
 .r-head { display:flex; justify-content:space-between; gap:16px; padding-bottom:14px; border-bottom:1px dashed var(--line); margin-bottom:12px; }
 .r-brand { font-weight:700; }
@@ -199,7 +206,6 @@ a { color:inherit; }
 .glance-v { font-size:2rem; font-weight:760; letter-spacing:-.03em; }
 .muted { color:var(--soft); }
 
-/* audiences */
 .audience-panel { background:var(--accent-soft); border-block:1px solid var(--line); }
 .audience-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:15px; margin-top:36px; }
 .card { background:var(--raised); border:1px solid var(--line); border-radius:var(--radius); padding:25px; }
@@ -207,13 +213,9 @@ a { color:inherit; }
 .card p { color:var(--soft); margin:0; font-size:.93rem; }
 .actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:28px; }
 
-/* pricing */
 .price-section { background:var(--sunken); border-block:1px solid var(--line); }
 .price-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:44px; align-items:stretch; }
-.price-card {
-  position:relative; display:flex; flex-direction:column; background:var(--raised);
-  border:1px solid var(--line); border-radius:16px; padding:31px 27px;
-}
+.price-card { position:relative; display:flex; flex-direction:column; background:var(--raised); border:1px solid var(--line); border-radius:16px; padding:31px 27px; }
 .price-card.featured { border-color:var(--accent); box-shadow:0 2px 6px rgba(61,107,92,.12),0 20px 50px rgba(35,40,46,.09); }
 .price-badge { position:absolute; top:-12px; left:27px; background:var(--accent); color:#fff; border-radius:99px; padding:5px 12px; font-size:.67rem; letter-spacing:.08em; text-transform:uppercase; font-weight:750; }
 .price-tier { color:var(--accent); font-size:.76rem; letter-spacing:.12em; text-transform:uppercase; font-weight:750; }
@@ -227,22 +229,37 @@ a { color:inherit; }
 .price-card .btn { width:100%; }
 .price-fine { color:var(--faint); font-size:.82rem; text-align:center; max-width:720px; margin:24px auto 0; }
 
-/* footer */
+.resource-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:15px; margin-top:34px; }
+.resource-card { background:var(--raised); border:1px solid var(--line); border-radius:var(--radius); padding:25px; text-decoration:none; }
+.resource-card:hover { border-color:var(--accent); }
+.resource-card strong { display:block; margin-bottom:7px; }
+.resource-card span { color:var(--soft); font-size:.92rem; }
+
 .foot { padding:78px 28px 50px; border-top:1px solid var(--line); }
 .foot-inner { max-width:1040px; margin:54px auto 0; display:flex; justify-content:space-between; gap:28px; align-items:center; flex-wrap:wrap; }
 .foot-links { display:flex; gap:10px; flex-wrap:wrap; }
 .foot-links a { color:var(--soft); text-decoration:none; font-size:.88rem; }
 .foot-links a:hover { color:var(--ink); }
 
+@media (max-width:960px) {
+  .site-nav { align-items:flex-start; flex-direction:column; gap:8px; padding-block:15px 13px; }
+  .site-header { position:absolute; }
+  .site-links { width:100%; justify-content:flex-start; gap:22px; overflow-x:auto; padding-bottom:4px; scrollbar-width:none; }
+  .site-links::-webkit-scrollbar { display:none; }
+  .hero { padding-top:176px; }
+}
 @media (max-width:860px) {
-  .usp-grid,.ledger,.product-grid,.price-grid { grid-template-columns:1fr; }
+  .usp-grid,.ledger,.product-grid,.price-grid,.resource-grid { grid-template-columns:1fr; }
   .audience-grid { grid-template-columns:1fr; }
   .category-note { flex-direction:column; }
-  .hero { min-height:auto; padding-top:128px; }
+  .hero { min-height:auto; }
 }
 @media (max-width:560px) {
+  .site-nav { padding-inline:20px; }
+  .site-links { gap:19px; }
+  .site-links a { font-size:.86rem; }
   .section { padding:82px 20px; }
-  .hero { padding-inline:20px; }
+  .hero { padding:164px 20px 82px; }
   .hero h1 { font-size:clamp(2.65rem,13vw,4.1rem); }
   .hero-cta .btn { width:100%; }
   .ledger > div,.receipt,.glance,.usp-card,.price-card { padding:23px; }
@@ -258,6 +275,20 @@ a { color:inherit; }
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WCGXLTMQ" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
+
+<div class="site-header">
+  <nav class="site-nav" aria-label="Primary navigation">
+    <a class="site-brand" href="#top" aria-label="Carbon Canvas home">Carbon Canvas</a>
+    <div class="site-links">
+      <a href="#platform">Platform</a>
+      <a href="#use-cases">Use cases</a>
+      <a href="https://github.com/amimoh28/carbon-canvas" target="_blank" rel="noopener noreferrer">Developers</a>
+      <a href="#resources">Resources</a>
+      <a class="enterprise" href="/enterprise">Enterprise</a>
+      <a href="/methodology">Research</a>
+    </div>
+  </nav>
+</div>
 
 <header class="hero" id="top">
   <div class="hero-grid" aria-hidden="true"></div>
@@ -375,10 +406,10 @@ a { color:inherit; }
   </div>
 </section>
 
-<section class="section">
+<section class="section" id="platform">
   <div class="inner">
     <div class="rv">
-      <div class="kicker">The product</div>
+      <div class="kicker">The platform</div>
       <h2 class="h2">Every session becomes an understandable AI receipt.</h2>
       <p class="lede">
         See what ran, for how long, what it may have required from the grid, and why
@@ -413,10 +444,10 @@ a { color:inherit; }
   </div>
 </section>
 
-<section class="section audience-panel" id="organizations">
+<section class="section audience-panel" id="use-cases">
   <div class="inner">
     <div class="rv">
-      <div class="kicker">For organizations</div>
+      <div class="kicker">Use cases</div>
       <h2 class="h2">Your existing tools show activity. Carbon Canvas adds environmental understanding.</h2>
       <p class="lede">
         Provider dashboards, security systems, and corporate carbon platforms each show
@@ -426,16 +457,16 @@ a { color:inherit; }
     </div>
     <div class="audience-grid">
       <article class="card rv">
-        <h3>Works alongside your stack</h3>
-        <p>Complements AI adoption, security, cloud-emissions, and carbon-accounting tools rather than trying to replace them.</p>
+        <h3>For individuals and creators</h3>
+        <p>Understand personal AI habits across tools through receipts, trends, comparisons, and practical guidance.</p>
       </article>
       <article class="card rv">
-        <h3>Starts with a bounded pilot</h3>
-        <p>Begin with one voluntary team, department, course, or cohort before making any organization-wide commitment.</p>
+        <h3>For companies and teams</h3>
+        <p>Run a bounded, voluntary pilot that complements AI adoption, security, Green IT, ESG, and responsible-AI programs.</p>
       </article>
       <article class="card rv">
-        <h3>States the limits clearly</h3>
-        <p>Outputs are decision-support estimates with uncertainty, not provider telemetry or audited emissions figures.</p>
+        <h3>For higher education</h3>
+        <p>Explore AI energy literacy with a course, department, or campus cohort without collecting private conversations.</p>
       </article>
     </div>
     <div class="actions rv">
@@ -496,17 +527,18 @@ a { color:inherit; }
   </div>
 </section>
 
-<section class="section">
+<section class="section" id="resources">
   <div class="inner rv">
-    <div class="kicker">Transparent methodology</div>
+    <div class="kicker">Resources</div>
     <h2 class="h2">Every estimate should show its work.</h2>
     <p class="lede">
-      The Carbon Canvas methodology is versioned, sourced, and range-based. It explains
-      what is observed, what must be estimated, where uncertainty enters, and what the product does not claim.
+      The Carbon Canvas methodology is versioned, sourced, and range-based. Explore the
+      research assumptions, privacy approach, and public estimator behind the product.
     </p>
-    <div class="actions">
-      <a class="btn secondary" href="/methodology">Read the methodology →</a>
-      <a class="btn secondary" href="/privacy">Review the privacy approach</a>
+    <div class="resource-grid">
+      <a class="resource-card" href="/methodology"><strong>Research methodology →</strong><span>Sources, assumptions, ranges, confidence levels, and limitations.</span></a>
+      <a class="resource-card" href="/privacy"><strong>Privacy architecture →</strong><span>What Carbon Canvas observes, what it deliberately avoids, and why.</span></a>
+      <a class="resource-card" href="/calculator"><strong>Public estimator →</strong><span>Try a transparent, no-sign-up estimate in your browser.</span></a>
     </div>
   </div>
 </section>
@@ -526,13 +558,13 @@ a { color:inherit; }
       <div class="faint" style="margin-top:5px">Cross-platform AI environmental intelligence. Private by architecture.</div>
     </div>
     <nav class="foot-links" aria-label="Footer">
-      <a href="/calculator">Estimator</a>
-      <a href="#why">Why Carbon Canvas</a>
+      <a href="#platform">Platform</a>
+      <a href="#use-cases">Use cases</a>
+      <a href="https://github.com/amimoh28/carbon-canvas">Developers</a>
+      <a href="#resources">Resources</a>
+      <a href="/enterprise">Enterprise</a>
+      <a href="/methodology">Research</a>
       <a href="#pricing">Pricing</a>
-      <a href="/enterprise">Companies</a>
-      <a href="/higher-education">Higher education</a>
-      <a href="/methodology">Methodology</a>
-      <a href="/privacy">Privacy</a>
     </nav>
   </div>
 </footer>

@@ -102,44 +102,10 @@ input:focus, select:focus { outline: 2px solid var(--accent); outline-offset: 1p
 <iframe name="cc_sink" style="display:none" title="submit"></iframe>
 
 <script>
-/* ============================================================================
-   WAITLIST SETUP — paste 5 values from your Google Form, then it just works.
-   Data lands in the Google Sheet linked to that form.
-
-   HOW TO GET THESE (one-time, ~5 minutes):
-   1. Go to forms.google.com → Blank form. Add 4 questions IN THIS ORDER:
-        • "Name"       (Short answer)
-        • "Age group"  (Multiple choice or Dropdown)
-        • "Email"      (Short answer)
-        • "Phone"      (Short answer)
-      In the form's ⋮ menu → Settings, turn OFF "Collect email addresses"
-      and "Limit to 1 response" so anyone can submit.
-      Click "Responses" tab → the green Sheets icon → creates your Google Sheet.
-   3. Click "Send" → the <> (link) icon to confirm the form is public, then
-      open the form's PREVIEW (the eye icon), right-click → View Page Source,
-      and search for "formResponse" and "entry." — OR simpler: use any free
-      "Google Form to entry IDs" helper. You need:
-        - the form action URL  (…/forms/d/e/XXXXXXXX/formResponse)
-        - the entry ID for each of the 4 questions (entry.1234567890)
-   4. Paste them below, replacing every REPLACE_ value. Save, redeploy. Done.
-
-   Until these are filled in, the form still shows the thank-you screen but
-   nothing is saved — so don't forget this step before you share the link.
-   ========================================================================== */
-const FORM = {
-  action: "https://docs.google.com/forms/d/e/REPLACE_FORM_ID/formResponse",
-  fields: {
-    name:  "entry.REPLACE_NAME",
-    age:   "entry.REPLACE_AGE",
-    email: "entry.REPLACE_EMAIL",
-    phone: "entry.REPLACE_PHONE",
-  },
-};
+const WAITLIST_ENDPOINT = "https://script.google.com/macros/s/AKfycbzGMuFWqA9rI9HlpLmQ8eTrDtCzJ-IXJOq0Dt8f6_JqQxjpFKsPIgEKcNvmlGA1_cNuLA/exec";
 
 const form = document.getElementById("waitlist");
 const errEl = document.getElementById("err");
-const isConfigured = () => !FORM.action.includes("REPLACE");
-
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   errEl.textContent = "";
@@ -153,23 +119,26 @@ form.addEventListener("submit", (e) => {
   if (!age) return (errEl.textContent = "Please pick an age group.");
   if (!email && !phone) return (errEl.textContent = "Please add an email or a phone number.");
 
-  if (isConfigured()) {
-    // Build a real form POST into the hidden iframe (no CORS issues this way).
-    const gf = document.createElement("form");
-    gf.action = FORM.action;
-    gf.method = "POST";
-    gf.target = "cc_sink";
-    const add = (k, v) => {
-      const i = document.createElement("input");
-      i.type = "hidden"; i.name = k; i.value = v; gf.appendChild(i);
-    };
-    add(FORM.fields.name, name);
-    add(FORM.fields.age, age);
-    add(FORM.fields.email, email);
-    add(FORM.fields.phone, phone);
-    document.body.appendChild(gf);
-    gf.submit();
-  }
+  // Submit directly to Apps Script through the hidden iframe. Standard field
+  // names are available in Apps Script as e.parameter.name, age, email, phone.
+  const submission = document.createElement("form");
+  submission.action = WAITLIST_ENDPOINT;
+  submission.method = "POST";
+  submission.target = "cc_sink";
+  const add = (key, value) => {
+    const input = document.createElement("input");
+    input.type = "hidden";
+    input.name = key;
+    input.value = value;
+    submission.appendChild(input);
+  };
+  add("name", name);
+  add("age", age);
+  add("email", email);
+  add("phone", phone);
+  document.body.appendChild(submission);
+  submission.submit();
+  submission.remove();
 
   // Show the thank-you either way (so the UX works while you finish setup).
   form.style.display = "none";

@@ -3,5 +3,14 @@
   "buildCommand": null,
   "installCommand": null,
   "outputDirectory": "apps/site",
-  "framework": null
+  "framework": null,
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/index",
+      "destination": "/",
+      "permanent": true
+    }
+  ]
 }

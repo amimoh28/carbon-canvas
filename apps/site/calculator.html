@@ -82,7 +82,18 @@ select:focus, input:focus { outline: 2px solid var(--accent); outline-offset: 1p
   letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.05;
 }
 .compare { color: var(--soft); margin: 8px 0 4px; font-size: 1.02rem; }
-.perday { color: var(--faint); font-size: .85rem; }
+.perday { color: var(--faint); font-size: .85rem; margin-top: 10px; }
+.examples { list-style: none; margin: 12px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.examples li { display: flex; gap: 10px; align-items: baseline; font-size: .9rem; color: var(--soft); }
+.examples li .em { flex: none; width: 1.3em; text-align: center; }
+.examples li b { color: var(--ink); font-weight: 600; }
+
+.water { margin-top: 16px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--sunken); }
+.water-head { display: flex; justify-content: space-between; align-items: center; font-weight: 600; font-size: .9rem; }
+.water-tag { font-size: .68rem; text-transform: uppercase; letter-spacing: .08em; color: var(--faint); background: var(--bg); border: 1px solid var(--line); border-radius: 99px; padding: 2px 8px; font-weight: 600; }
+.water-val { font-size: 1.35rem; font-weight: 700; letter-spacing: -.01em; margin: 6px 0 2px; font-variant-numeric: tabular-nums; }
+.water-cmp { color: var(--soft); font-size: .92rem; }
+.water-note { font-size: .78rem; color: var(--faint); margin-top: 8px; line-height: 1.5; }
 
 .conf { display: inline-flex; align-items: center; gap: 7px; font-size: .86rem; color: var(--soft); margin-top: 16px; }
 .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); display: inline-block; }
@@ -162,9 +173,10 @@ summary { cursor: pointer; color: var(--accent); font-size: .86rem; }
 
     <!-- Result -->
     <div class="panel result">
-      <div class="kicker">Your estimated AI energy</div>
+      <div class="kicker">Your estimated AI energy — per month</div>
       <div class="bignum" id="energy">—</div>
       <div class="compare" id="compare">—</div>
+      <ul class="examples" id="examples"></ul>
       <div class="perday" id="permonth">—</div>
 
       <span class="conf conf-medium">
@@ -181,10 +193,20 @@ summary { cursor: pointer; color: var(--accent); font-size: .86rem; }
         </div>
       </details>
 
-      <div class="energy-note">
-        We estimate <b>energy only</b> — not carbon or water. Turning energy into
-        those needs facts about the data center that aren't public, so we don't
-        guess. <a href="methodology.html">Here's why →</a>
+      <!-- Water: shown as a deliberately rough ballpark -->
+      <div class="water">
+        <div class="water-head">
+          <span>💧 And roughly the water…</span>
+          <span class="water-tag">roughest estimate</span>
+        </div>
+        <div class="water-val" id="water">—</div>
+        <div class="water-cmp" id="waterCmp">—</div>
+        <div class="water-note">
+          Data centers use water for cooling, and more is used generating the
+          electricity. Nobody publishes which data center served your prompt —
+          so this range is very wide. <b>That's exactly why we never put water
+          in your real footprint.</b> <a href="methodology.html">Why →</a>
+        </div>
       </div>
     </div>
   </div>
@@ -198,14 +220,17 @@ summary { cursor: pointer; color: var(--accent); font-size: .86rem; }
         privately, in your browser, without ever reading your conversations.
       </p>
     </div>
-    <a class="btn" href="index.html#extension">Get the extension</a>
+    <a class="btn" href="waitlist.html">Join the waitlist</a>
   </div>
 
   <p class="disclaimer">
     These are rough scenario estimates for curiosity and learning, not a formal
-    carbon audit. Numbers are built from the same published research behind our
-    <a href="methodology.html">methodology</a> (e-0.2.0), expressed as ranges
-    because the exact infrastructure serving any AI request isn't public.
+    carbon audit. Energy is our most confident figure; the water range is far
+    rougher and shown only for perspective. Both are built from the same
+    published research behind our <a href="methodology.html">methodology</a>
+    (e-0.2.0), expressed as ranges because the exact infrastructure serving any
+    AI request isn't public. We don't show a carbon number here — that needs
+    location data we won't guess at.
   </p>
 </div>
 
@@ -220,8 +245,31 @@ const BANDS = {
   deep:     { lo: 1.0,  hi: 14.0, note: "long / reasoning" }, // ~2,500+ tokens, hidden thinking
 };
 const WEEKS_PER_MONTH = 4.33;
-const PHONE_WH = 15;   // one full phone charge ≈ 15 Wh (matches our methodology)
-const KETTLE_WH = 100; // one kettle boil ≈ 100 Wh
+
+// Water intensity (litres per kWh): data-center cooling PLUS the water used to
+// GENERATE the electricity. Deliberately wide — see methodology water bands
+// (onsite 0.02–1.9 + off-site ~1–5 L/kWh). Kept as a rough educational range.
+const WATER_L_PER_KWH = { lo: 0.2, hi: 7 };
+
+// Energy reference points (Wh) for the "like…" comparisons. All everyday,
+// all real, all sourced from common published figures.
+const PHONE_WH = 15;      // one full smartphone charge
+const KETTLE_WH = 100;    // one kettle boil
+const SEARCH_WH = 0.3;    // one web search
+const LEDHOUR_WH = 9;     // an LED bulb for one hour (~9 W)
+const LAPTOP_HR_WH = 50;  // a laptop running for one hour (~50 W)
+const STREAM_HR_WH = 75;  // one hour of HD video streaming (data-center side)
+const MICROWAVE_MIN_WH = 17; // a microwave for one minute (~1,000 W)
+const TOAST_WH = 33;      // toasting bread once (~2 min at 1,000 W)
+const LAUNDRY_WH = 700;   // one warm load of laundry
+const FRIDGE_DAY_WH = 1000; // a fridge running for a full day
+
+// Water reference points (litres).
+const BOTTLE_L = 0.5;     // a small water bottle
+const CUP_L = 0.25;       // a cup of water
+const SHOWER_L = 65;      // a 10-minute shower
+const BATH_L = 150;       // a full bathtub
+const KETTLE_FILL_L = 1.5;// filling the kettle
 
 const PRESETS = {
   light:   { perDay: 5,  days: "2", use: "quick" },
@@ -230,6 +278,8 @@ const PRESETS = {
 };
 
 const $ = (id) => document.getElementById(id);
+// Proper pluralisation with explicit forms (handles multi-word units).
+const phrase = (n, one, many) => `${n.toLocaleString()} ${n === 1 ? one : many}`;
 
 function fmtEnergy(lo, hi) {
   const f = (wh) => {
@@ -241,15 +291,70 @@ function fmtEnergy(lo, hi) {
   return `≈ ${f(lo)}–${f(hi)} ${unit}`;
 }
 
-function comparison(lo, hi) {
-  const mid = (lo + hi) / 2;
+// Headline comparison — scales with size, stays relatable.
+function comparison(mid) {
   if (mid <= 0) return "";
-  if (mid < 1500) {
+  if (mid < 300) {
     const n = Math.max(1, Math.round(mid / PHONE_WH));
-    return `About the same as ${n} phone charge${n === 1 ? "" : "s"} — over a whole month.`;
+    return `That's about ${phrase(n, "phone charge", "phone charges")} — spread across a whole month.`;
   }
-  const n = Math.max(1, Math.round(mid / KETTLE_WH));
-  return `About the same as boiling the kettle ${n} times — over a whole month.`;
+  if (mid < 3000) {
+    const n = Math.max(1, Math.round(mid / KETTLE_WH));
+    return `That's about ${phrase(n, "kettle boil", "kettle boils")} — spread across a whole month.`;
+  }
+  if (mid < 20000) {
+    const n = Math.max(1, Math.round(mid / LAUNDRY_WH));
+    return `That's about ${phrase(n, "warm load of laundry", "warm loads of laundry")} — over a month.`;
+  }
+  const n = Math.max(1, Math.round(mid / FRIDGE_DAY_WH));
+  return `That's roughly running your fridge for ${phrase(n, "day", "days")}.`;
+}
+
+// A rotating handful of "or, put another way…" examples, chosen to be legible
+// at the user's scale (we pick ones that land at a nice whole-ish number).
+function energyExamples(mid) {
+  const all = [
+    { emoji: "🔍", n: mid / SEARCH_WH,       one: "web search",             many: "web searches" },
+    { emoji: "💡", n: mid / LEDHOUR_WH,      one: "hour of an LED bulb",    many: "hours of an LED bulb" },
+    { emoji: "💻", n: mid / LAPTOP_HR_WH,    one: "hour on a laptop",       many: "hours on a laptop" },
+    { emoji: "📺", n: mid / STREAM_HR_WH,    one: "hour of HD streaming",   many: "hours of HD streaming" },
+    { emoji: "🍞", n: mid / TOAST_WH,        one: "slice of toast",         many: "slices of toast" },
+    { emoji: "♨️", n: mid / MICROWAVE_MIN_WH,one: "minute in the microwave",many: "minutes in the microwave" },
+  ];
+  // Keep examples whose count reads well (roughly 2–5,000) and show three.
+  const good = all.filter((e) => e.n >= 2 && e.n < 5000);
+  const pick = (good.length ? good : all).slice(0, 3);
+  return pick.map((e) => {
+    const n = Math.round(e.n);
+    return `<li><span class="em">${e.emoji}</span><span><b>${n.toLocaleString()}</b> ${n === 1 ? e.one : e.many}</span></li>`;
+  }).join("");
+}
+
+function fmtWater(lo, hi) {
+  const f = (l) => {
+    if (l < 0.1) return "<0.1";
+    if (l < 10) return l.toFixed(1);
+    return Math.round(l).toLocaleString();
+  };
+  return `≈ ${f(lo)}–${f(hi)} litres`;
+}
+
+function waterComparison(mid) {
+  if (mid <= 0) return "";
+  if (mid < 4) {
+    const n = Math.max(1, Math.round(mid / CUP_L));
+    return `Somewhere around ${phrase(n, "cup of water", "cups of water")} — for the month.`;
+  }
+  if (mid < 40) {
+    const n = Math.max(1, Math.round(mid / BOTTLE_L));
+    return `Roughly ${phrase(n, "small water bottle", "small water bottles")} — for the month.`;
+  }
+  if (mid < 200) {
+    const n = Math.max(1, Math.round(mid / SHOWER_L));
+    return `In the ballpark of ${phrase(n, "ten-minute shower", "ten-minute showers")}.`;
+  }
+  const n = Math.max(1, Math.round(mid / BATH_L));
+  return `Very roughly ${phrase(n, "full bathtub", "full bathtubs")} of water.`;
 }
 
 function update() {
@@ -258,14 +363,22 @@ function update() {
   const band = BANDS[$("use").value];
 
   const monthlyMsgs = perDay * daysPerWeek * WEEKS_PER_MONTH;
-  const lo = monthlyMsgs * band.lo;
-  const hi = monthlyMsgs * band.hi;
+  const lo = monthlyMsgs * band.lo;   // Wh
+  const hi = monthlyMsgs * band.hi;   // Wh
+  const mid = (lo + hi) / 2;
 
   $("perdayLabel").textContent = perDay;
   $("energy").textContent = fmtEnergy(lo, hi);
-  $("compare").textContent = comparison(lo, hi);
+  $("compare").textContent = comparison(mid);
+  $("examples").innerHTML = energyExamples(mid);
   $("permonth").textContent =
     `Based on about ${Math.round(monthlyMsgs).toLocaleString()} messages a month (${band.note}).`;
+
+  // Water: energy(kWh) × wide L/kWh band. Deliberately the roughest number here.
+  const wLo = (lo / 1000) * WATER_L_PER_KWH.lo;
+  const wHi = (hi / 1000) * WATER_L_PER_KWH.hi;
+  $("water").textContent = fmtWater(wLo, wHi);
+  $("waterCmp").textContent = waterComparison((wLo + wHi) / 2);
 
   // Confidence: deep/reasoning use is the least certain (hidden tokens).
   $("confword").textContent = $("use").value === "deep" ? "Low" : "Low–medium";

@@ -108,6 +108,7 @@ h1 { font-size:clamp(2.5rem, 6.8vw, 5rem); line-height:1.03; letter-spacing:-.03
 h2 { font-size:clamp(1.9rem, 4vw, 3rem); line-height:1.1; letter-spacing:-.025em; margin:10px 0 16px; }
 .lede { color:var(--soft); font-size:1.08rem; }
 .grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.market-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
 .card {
   background:var(--raised); border:1px solid var(--line); border-radius:var(--radius);
   padding:26px; box-shadow:0 1px 2px rgba(35,40,46,.04);
@@ -161,7 +162,7 @@ input:focus, select:focus, textarea:focus { outline:2px solid var(--accent); out
   .wrap { padding-inline:20px; }
   .topbar { align-items:flex-start; margin-bottom:42px; }
   .nav { gap:10px 14px; justify-content:flex-end; }
-  .principles, .grid-3 { grid-template-columns:1fr; }
+  .principles, .grid-3, .market-grid { grid-template-columns:1fr; }
   .hero { padding-bottom:56px; }
   .section { padding:60px 0; }
   .now { padding:28px; }
@@ -217,7 +218,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           gap between AI usage, environmental understanding, and employee education.
         </p>
       </div>
-      <div class="grid-3">
+      <div class="market-grid">
         <article class="card">
           <div class="num">01</div>
           <h3>Provider dashboards</h3>
@@ -238,10 +239,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </article>
         <article class="card">
           <div class="num">03</div>
-          <h3>Carbon and cloud reporting</h3>
+          <h3>Cloud-emissions dashboards</h3>
           <p>
-            Cloud-emissions dashboards and platforms such as <a href="https://watershed.com/platform/measure/carbon-accounting" rel="noopener">Watershed</a>
-            support broader carbon programs. They are not a simple, cross-platform AI energy receipt for everyday users.
+            Microsoft&rsquo;s <a href="https://learn.microsoft.com/en-us/industry/well-architected/sustainability/emissions-impact-dashboard-overview" rel="noopener">Emissions Impact Dashboards</a>
+            estimate emissions from Azure and Microsoft 365 cloud use. They do not provide one consistent AI energy receipt across ChatGPT, Claude, Gemini, and other tools.
+          </p>
+        </article>
+        <article class="card">
+          <div class="num">04</div>
+          <h3>Corporate carbon accounting</h3>
+          <p>
+            Platforms such as <a href="https://watershed.com/platform/measure/carbon-accounting" rel="noopener">Watershed</a>
+            support organization-wide inventories, supplier data, and reporting. Carbon Canvas is narrower, and its estimates are not audit-grade carbon figures.
           </p>
         </article>
       </div>

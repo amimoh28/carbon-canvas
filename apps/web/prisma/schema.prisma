@@ -19,14 +19,19 @@ datasource db {
 }
 
 model User {
-  id           String    @id @default(cuid())
-  email        String    @unique
-  passwordHash String
-  createdAt    DateTime  @default(now())
-  trackingPaused Boolean @default(false)
-  authSessions AuthSession[]
-  syncTokens   SyncToken[]
-  aiSessions   AiSession[]
+  id                       String    @id @default(cuid())
+  email                    String    @unique
+  passwordHash             String
+  createdAt                DateTime  @default(now())
+  trackingPaused           Boolean   @default(false)
+  plan                     String    @default("free")
+  stripeCustomerId         String?   @unique
+  stripeSubscriptionId     String?   @unique
+  stripeSubscriptionStatus String?
+  stripeCurrentPeriodEnd   DateTime?
+  authSessions             AuthSession[]
+  syncTokens               SyncToken[]
+  aiSessions               AiSession[]
 }
 
 model AuthSession {

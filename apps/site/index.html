@@ -233,10 +233,37 @@ a { color: inherit; }
   color: var(--soft); max-width: 600px; margin: 26px auto 0;
 }
 
+/* USP / differentiation */
+.usp-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; margin-top:40px; }
+.usp-card { background:var(--raised); border:1px solid var(--line); border-radius:var(--radius); padding:26px 28px; box-shadow:0 1px 2px rgba(35,40,46,.04); }
+.usp-card .n { font-size:.8rem; font-weight:700; color:var(--accent); letter-spacing:.04em; }
+.usp-card h3 { font-size:1.15rem; margin:8px 0 8px; letter-spacing:-.01em; }
+.usp-card p { color:var(--soft); margin:0; font-size:.96rem; }
+.usp-note { margin-top:24px; font-size:.95rem; color:var(--soft); border-left:3px solid var(--accent); padding:4px 0 4px 16px; max-width:660px; }
+.usp-note strong { color:var(--ink); }
+
+/* Pricing */
+.price-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:44px; align-items:stretch; }
+.price-card { display:flex; flex-direction:column; background:var(--raised); border:1px solid var(--line); border-radius:16px; padding:32px 28px; box-shadow:0 1px 2px rgba(35,40,46,.05); }
+.price-card.featured { border-color:var(--accent); box-shadow:0 2px 6px rgba(61,107,92,.12), 0 20px 50px rgba(35,40,46,.10); position:relative; }
+.price-badge { position:absolute; top:-12px; left:28px; background:var(--accent); color:#fff; font-size:.68rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:5px 12px; border-radius:99px; }
+.price-tier { font-size:.78rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--accent); }
+.price-amt { font-size:2.1rem; font-weight:750; letter-spacing:-.02em; margin:12px 0 2px; }
+.price-amt small { font-size:.9rem; font-weight:500; color:var(--faint); letter-spacing:0; }
+.price-for { color:var(--soft); font-size:.92rem; margin:0 0 18px; }
+.price-list { list-style:none; padding:0; margin:0 0 24px; flex:1; }
+.price-list li { padding:8px 0; font-size:.92rem; color:var(--soft); display:flex; gap:10px; align-items:baseline; border-bottom:1px solid var(--line); }
+.price-list li:last-child { border-bottom:0; }
+.price-list li::before { content:"✓"; color:var(--accent); flex:none; font-size:.85rem; }
+.price-card .btn { width:100%; text-align:center; }
+.price-fine { text-align:center; color:var(--faint); font-size:.82rem; margin-top:24px; max-width:680px; margin-inline:auto; }
+
 @media (max-width: 860px) {
   .collector { grid-template-columns: 1fr; gap: 32px; }
   .ledger { grid-template-columns: 1fr; }
   .edu-grid { grid-template-columns: 1fr; }
+  .usp-grid { grid-template-columns: 1fr; }
+  .price-grid { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
   .rv { transition: none; opacity: 1; transform: none; }
@@ -280,8 +307,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </p>
       <div class="hero-cta">
         <a class="btn" href="/calculator">Estimate your AI footprint</a>
-        <a class="btn secondary" href="/higher-education">For higher education</a>
-        <a class="btn secondary" href="/enterprise">For companies</a>
+        <a class="btn secondary" href="#pricing">See pricing</a>
+        <a class="btn secondary" href="/enterprise#pilot">Book a demo</a>
         <a class="btn secondary" href="/waitlist">Extension waitlist</a>
       </div>
     </div>
@@ -390,6 +417,45 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </section>
 
+<!-- 3.5 · Why Carbon Canvas (USP / differentiation) -->
+<section class="section" id="why" style="padding-top:40px">
+  <div class="inner">
+    <div class="rv">
+      <div class="kicker">Why Carbon Canvas</div>
+      <h2 class="h2">Not another AI carbon calculator.</h2>
+      <p class="lede">
+        A single-number footprint tool is generic and easy to copy. Our real
+        difference is the combination: cross-platform visibility, privacy by
+        design, transparent methodology, and education that changes behaviour.
+      </p>
+    </div>
+    <div class="usp-grid">
+      <article class="usp-card rv from-left">
+        <div class="n">01</div><h3>Cross-platform visibility</h3>
+        <p>ChatGPT, Claude, Gemini, and other AI tools in one place — not a single-app dashboard.</p>
+      </article>
+      <article class="usp-card rv from-right">
+        <div class="n">02</div><h3>Privacy by design</h3>
+        <p>We measure usage metadata, never the content of prompts or replies. The words never leave your browser.</p>
+      </article>
+      <article class="usp-card rv from-left">
+        <div class="n">03</div><h3>Transparent estimates</h3>
+        <p>Ranges, assumptions, and confidence levels — not uncertain carbon numbers dressed up as exact facts.</p>
+      </article>
+      <article class="usp-card rv from-right">
+        <div class="n">04</div><h3>Actionable education</h3>
+        <p>Helps people reduce unnecessary AI energy use, rather than producing one more emissions figure.</p>
+      </article>
+    </div>
+    <p class="usp-note">
+      <strong>For organizations:</strong> the missing sustainability layer
+      between AI-usage dashboards and corporate carbon reporting — the
+      environmental signal of AI use, in language ESG and responsible-AI teams
+      can act on, <strong>without monitoring what people say.</strong>
+    </p>
+  </div>
+</section>
+
 <!-- 4 · Higher education -->
 <section class="section edu-panel" id="higher-education">
   <div class="inner">
@@ -451,9 +517,68 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </article>
     </div>
     <div class="edu-actions rv">
-      <a class="btn" href="/enterprise">Explore company pilots →</a>
+      <a class="btn" href="/enterprise#pilot">Book a demo →</a>
+      <a class="btn secondary" href="/enterprise">Explore company pilots</a>
       <a class="btn secondary" href="/methodology">Review the methodology</a>
     </div>
+  </div>
+</section>
+
+<!-- 5.5 · Pricing -->
+<section class="section" id="pricing" style="background:var(--sunken);border-block:1px solid var(--line)">
+  <div class="inner">
+    <div class="rv" style="text-align:center">
+      <div class="kicker">Pricing</div>
+      <h2 class="h2" style="margin-inline:auto">Start free. Scale when you&rsquo;re ready.</h2>
+      <p class="lede" style="margin:0 auto">
+        The browser extension is free forever. Advanced analytics and
+        organization-wide programs are launching next.
+      </p>
+    </div>
+    <div class="price-grid">
+      <article class="price-card rv from-left">
+        <div class="price-tier">Personal</div>
+        <div class="price-amt">$0 <small>/ forever</small></div>
+        <p class="price-for">For individuals curious about their own AI use.</p>
+        <ul class="price-list">
+          <li>Cross-platform tracking (ChatGPT, Claude&hellip;)</li>
+          <li>Private &amp; on-device by default</li>
+          <li>Honest energy estimates with confidence</li>
+          <li>The free AI footprint estimator</li>
+        </ul>
+        <a class="btn secondary" href="/waitlist">Join the waitlist</a>
+      </article>
+      <article class="price-card featured rv">
+        <span class="price-badge">Coming at launch</span>
+        <div class="price-tier">Pro</div>
+        <div class="price-amt">Early access</div>
+        <p class="price-for">For power users, researchers, and creators.</p>
+        <ul class="price-list">
+          <li>Everything in Personal</li>
+          <li>Full history &amp; usage trends</li>
+          <li>AI receipts &amp; monthly reports</li>
+          <li>Data export</li>
+        </ul>
+        <a class="btn" href="/waitlist">Get early-bird pricing</a>
+      </article>
+      <article class="price-card rv from-right">
+        <div class="price-tier">Enterprise</div>
+        <div class="price-amt">Custom</div>
+        <p class="price-for">For companies, ESG, and responsible-AI teams.</p>
+        <ul class="price-list">
+          <li>Aggregate, cross-platform team insights</li>
+          <li>Sustainability &amp; responsible-AI reporting</li>
+          <li>Privacy review &amp; SSO on the roadmap</li>
+          <li>Guided 6&ndash;10 week pilot</li>
+        </ul>
+        <a class="btn" href="/enterprise#pilot">Book a demo →</a>
+      </article>
+    </div>
+    <p class="price-fine">
+      The extension is in Chrome Web Store review; paid tiers and billing arrive
+      at launch. Enterprise scope, privacy review, and pricing are agreed before
+      any pilot begins.
+    </p>
   </div>
 </section>
 
@@ -495,7 +620,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
     </div>
     <div style="display:flex;gap:12px;flex-wrap:wrap">
-      <a class="btn secondary" href="/waitlist">Waitlist</a>
+      <a class="btn secondary" href="#pricing">Pricing</a>
+      <a class="btn secondary" href="/enterprise#pilot">Book a demo</a>
       <a class="btn secondary" href="/calculator">Estimator</a>
       <a class="btn secondary" href="/higher-education">Higher Education</a>
       <a class="btn secondary" href="/enterprise">Companies</a>

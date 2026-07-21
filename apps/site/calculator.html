@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI Footprint Estimator — Carbon Canvas</title>
+<meta name="description" content="A rough, honest estimate of the energy behind your AI use — no account, no tracking, nothing leaves this page." />
+<link rel="icon" href="favicon.svg" type="image/svg+xml" />
+<style>
+:root {
+  --bg: #faf9f7; --raised: #ffffff; --sunken: #f1efeb;
+  --ink: #23282e; --soft: #5c6470; --faint: #8b93a0;
+  --line: #e5e2dc; --accent: #3d6b5c; --accent-soft: #e6efeb;
+  --earth: #2e2a24; --earth-ink: #ece7de;
+  --radius: 14px;
+  --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16181c; --raised: #1e2126; --sunken: #121417;
+    --ink: #e8e6e1; --soft: #a8adb5; --faint: #6f7681;
+    --line: #2b2f36; --accent: #7fb3a1; --accent-soft: #223530; --earth: #211e19;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--font); font-size: 15.5px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: var(--accent); }
+.wrap { max-width: 940px; margin: 0 auto; padding: 40px 24px 90px; }
+.back { display: inline-block; margin-bottom: 30px; color: var(--soft); text-decoration: none; font-size: .9rem; }
+.back:hover { color: var(--ink); }
+.kicker { font-size: .76rem; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); font-weight: 650; }
+h1 { font-size: clamp(2rem, 4.5vw, 2.9rem); letter-spacing: -.025em; line-height: 1.1; margin: 10px 0 12px; }
+.lede { color: var(--soft); max-width: 620px; font-size: 1.08rem; }
+
+.calc {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+  margin-top: 34px;
+}
+@media (max-width: 780px) { .calc { grid-template-columns: 1fr; } }
+
+.panel {
+  background: var(--raised); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 24px 26px;
+  box-shadow: 0 1px 2px rgba(35,40,46,.05), 0 4px 16px rgba(35,40,46,.05);
+}
+.panel h2 { font-size: 1.05rem; margin: 0 0 4px; }
+.panel .hint { color: var(--faint); font-size: .84rem; margin: 0 0 18px; }
+
+.presets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 22px; }
+.presets button {
+  display: flex; flex-direction: column; gap: 3px; align-items: flex-start;
+  padding: 12px 12px; border: 1px solid var(--line); border-radius: 11px;
+  background: var(--bg); color: var(--ink); cursor: pointer; text-align: left;
+  font-family: var(--font); transition: border-color .15s ease, background .15s ease;
+}
+.presets button:hover { border-color: var(--accent); }
+.presets button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.presets button b { font-size: .92rem; }
+.presets button small { font-size: .72rem; opacity: .8; }
+
+label { display: block; font-size: .85rem; font-weight: 600; color: var(--ink); margin: 16px 0 7px; }
+label .q { font-weight: 400; color: var(--faint); }
+select, input[type="number"] {
+  width: 100%; min-height: 44px; padding: 0 12px;
+  border: 1px solid var(--line); border-radius: 10px;
+  background: var(--bg); color: var(--ink); font-size: .95rem; font-family: var(--font);
+}
+input[type="range"] { width: 100%; accent-color: var(--accent); margin-top: 8px; }
+.rangerow { display: flex; align-items: baseline; justify-content: space-between; }
+.rangeval { font-variant-numeric: tabular-nums; font-weight: 650; }
+select:focus, input:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: transparent; }
+
+/* Result */
+.result { display: flex; flex-direction: column; }
+.result .kicker { margin-bottom: 8px; }
+.bignum {
+  font-size: clamp(2.1rem, 5vw, 2.9rem); font-weight: 700;
+  letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.05;
+}
+.compare { color: var(--soft); margin: 8px 0 4px; font-size: 1.02rem; }
+.perday { color: var(--faint); font-size: .85rem; }
+
+.conf { display: inline-flex; align-items: center; gap: 7px; font-size: .86rem; color: var(--soft); margin-top: 16px; }
+.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); display: inline-block; }
+details { margin-top: 12px; }
+summary { cursor: pointer; color: var(--accent); font-size: .86rem; }
+.reason { display: flex; gap: 8px; font-size: .85rem; padding: 4px 0; color: var(--soft); }
+.reason .m { color: var(--faint); }
+
+.energy-note {
+  margin-top: auto; padding-top: 16px; border-top: 1px dashed var(--line);
+  font-size: .82rem; color: var(--faint);
+}
+
+/* CTA */
+.cta {
+  margin-top: 22px; background: var(--earth); color: var(--earth-ink);
+  border-radius: var(--radius); padding: 28px 30px;
+  display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap;
+}
+.cta h3 { margin: 0 0 6px; font-size: 1.25rem; letter-spacing: -.01em; }
+.cta p { margin: 0; color: #b8b0a2; font-size: .95rem; max-width: 440px; }
+.btn {
+  display: inline-block; background: var(--accent); color: #fff; border: none;
+  border-radius: 10px; padding: 12px 22px; font-size: .95rem; font-weight: 600;
+  text-decoration: none; cursor: pointer; white-space: nowrap;
+}
+.btn:hover { opacity: .9; }
+
+.disclaimer {
+  margin-top: 22px; font-size: .82rem; color: var(--faint);
+  border-left: 3px solid var(--line); padding-left: 14px;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">← Carbon Canvas</a>
+
+  <div class="kicker">Free estimator</div>
+  <h1>How much energy does your AI use?</h1>
+  <p class="lede">
+    A rough, honest estimate — in about ten seconds. No account, no tracking,
+    nothing leaves this page. Move the numbers and watch the range change.
+  </p>
+
+  <div class="calc">
+    <!-- Inputs -->
+    <div class="panel">
+      <h2>Tell us roughly how you use AI</h2>
+      <p class="hint">Start with the closest match, then fine-tune if you like.</p>
+
+      <div class="presets" id="presets">
+        <button data-preset="light"><b>Light</b><small>A few times a week</small></button>
+        <button data-preset="regular" class="active"><b>Regular</b><small>Part of your day</small></button>
+        <button data-preset="heavy"><b>Heavy</b><small>All day, every day</small></button>
+      </div>
+
+      <label for="perday">
+        Messages on a typical day <span class="q" id="perdayLabel">20</span>
+      </label>
+      <input type="range" id="perday" min="1" max="200" value="20" />
+
+      <label for="days">How many days a week?</label>
+      <select id="days">
+        <option value="2">A couple of days</option>
+        <option value="5" selected>Most weekdays</option>
+        <option value="7">Pretty much every day</option>
+      </select>
+
+      <label for="use">What do you mostly use it for? <span class="q">(affects message size)</span></label>
+      <select id="use">
+        <option value="quick">Quick questions &amp; short chats</option>
+        <option value="everyday" selected>Writing &amp; everyday work</option>
+        <option value="deep">Deep research, coding, long tasks</option>
+      </select>
+    </div>
+
+    <!-- Result -->
+    <div class="panel result">
+      <div class="kicker">Your estimated AI energy</div>
+      <div class="bignum" id="energy">—</div>
+      <div class="compare" id="compare">—</div>
+      <div class="perday" id="permonth">—</div>
+
+      <span class="conf conf-medium">
+        <span class="dot"></span> <span id="confword">Low–medium</span> confidence
+      </span>
+      <details>
+        <summary>Why is this a range, not one number?</summary>
+        <div class="reason"><span class="m">△</span> We don't know exactly which model served each message</div>
+        <div class="reason"><span class="m">△</span> We don't know which data center, or how it's powered</div>
+        <div class="reason"><span class="m">△</span> Your messages vary in length from one day to the next</div>
+        <div style="font-size:.82rem;color:var(--faint);margin-top:8px">
+          So we show an honest range instead of a made-up exact figure. That's
+          the whole idea. <a href="methodology.html">See our full method →</a>
+        </div>
+      </details>
+
+      <div class="energy-note">
+        We estimate <b>energy only</b> — not carbon or water. Turning energy into
+        those needs facts about the data center that aren't public, so we don't
+        guess. <a href="methodology.html">Here's why →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conversion CTA — the point of the tool -->
+  <div class="cta">
+    <div>
+      <h3>This is a guess. Want the real thing?</h3>
+      <p>
+        The Carbon Canvas extension measures your actual AI usage automatically —
+        privately, in your browser, without ever reading your conversations.
+      </p>
+    </div>
+    <a class="btn" href="index.html#extension">Get the extension</a>
+  </div>
+
+  <p class="disclaimer">
+    These are rough scenario estimates for curiosity and learning, not a formal
+    carbon audit. Numbers are built from the same published research behind our
+    <a href="methodology.html">methodology</a> (e-0.2.0), expressed as ranges
+    because the exact infrastructure serving any AI request isn't public.
+  </p>
+</div>
+
+<script>
+// Per-message energy bands (watt-hours, blended input+output, AFTER datacenter
+// PUE overhead). Derived directly from the Carbon Canvas methodology (e-0.2.0):
+// device band per 1k tokens × PUE 1.09–1.6, applied to a typical message size
+// for each use type. Energy only — carbon/water deliberately excluded.
+const BANDS = {
+  quick:    { lo: 0.07, hi: 0.8,  note: "short exchange" },   // ~400 tokens
+  everyday: { lo: 0.16, hi: 1.9,  note: "typical message" },  // ~1,000 tokens
+  deep:     { lo: 1.0,  hi: 14.0, note: "long / reasoning" }, // ~2,500+ tokens, hidden thinking
+};
+const WEEKS_PER_MONTH = 4.33;
+const PHONE_WH = 15;   // one full phone charge ≈ 15 Wh (matches our methodology)
+const KETTLE_WH = 100; // one kettle boil ≈ 100 Wh
+
+const PRESETS = {
+  light:   { perDay: 5,  days: "2", use: "quick" },
+  regular: { perDay: 20, days: "5", use: "everyday" },
+  heavy:   { perDay: 80, days: "7", use: "deep" },
+};
+
+const $ = (id) => document.getElementById(id);
+
+function fmtEnergy(lo, hi) {
+  const f = (wh) => {
+    if (hi >= 1000) return (wh / 1000).toFixed(wh / 1000 < 10 ? 2 : 1); // kWh
+    if (wh < 10) return wh.toFixed(1);
+    return String(Math.round(wh));
+  };
+  const unit = hi >= 1000 ? "kWh" : "Wh";
+  return `≈ ${f(lo)}–${f(hi)} ${unit}`;
+}
+
+function comparison(lo, hi) {
+  const mid = (lo + hi) / 2;
+  if (mid <= 0) return "";
+  if (mid < 1500) {
+    const n = Math.max(1, Math.round(mid / PHONE_WH));
+    return `About the same as ${n} phone charge${n === 1 ? "" : "s"} — over a whole month.`;
+  }
+  const n = Math.max(1, Math.round(mid / KETTLE_WH));
+  return `About the same as boiling the kettle ${n} times — over a whole month.`;
+}
+
+function update() {
+  const perDay = +$("perday").value;
+  const daysPerWeek = +$("days").value;
+  const band = BANDS[$("use").value];
+
+  const monthlyMsgs = perDay * daysPerWeek * WEEKS_PER_MONTH;
+  const lo = monthlyMsgs * band.lo;
+  const hi = monthlyMsgs * band.hi;
+
+  $("perdayLabel").textContent = perDay;
+  $("energy").textContent = fmtEnergy(lo, hi);
+  $("compare").textContent = comparison(lo, hi);
+  $("permonth").textContent =
+    `Based on about ${Math.round(monthlyMsgs).toLocaleString()} messages a month (${band.note}).`;
+
+  // Confidence: deep/reasoning use is the least certain (hidden tokens).
+  $("confword").textContent = $("use").value === "deep" ? "Low" : "Low–medium";
+
+  // Sync preset highlight
+  document.querySelectorAll("#presets button").forEach((b) => {
+    const p = PRESETS[b.dataset.preset];
+    b.classList.toggle(
+      "active",
+      p.perDay === perDay && p.days === $("days").value && p.use === $("use").value
+    );
+  });
+}
+
+document.querySelectorAll("#presets button").forEach((b) => {
+  b.addEventListener("click", () => {
+    const p = PRESETS[b.dataset.preset];
+    $("perday").value = p.perDay;
+    $("days").value = p.days;
+    $("use").value = p.use;
+    update();
+  });
+});
+["perday", "days", "use"].forEach((id) => $(id).addEventListener("input", update));
+update();
+</script>
+</body>
+</html>
